@@ -5,7 +5,7 @@ import mdx from '@mdx-js/rollup';
 import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from "rehype-pretty-code";
 
-const repoName = "partas-solid-githubactions-mdx";
+const repoName = "Partas.Solid";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -19,10 +19,10 @@ export default defineConfig({
             ]
         }
     },
-    // base: `/${repoName}/`,
-    // build: {
-    //     outDir: "dist",
-    // },
+    base: `/${repoName}/`,
+    build: {
+        outDir: "dist",
+    },
     plugins: [
         solidPlugin(),
         tailwindcss(),
