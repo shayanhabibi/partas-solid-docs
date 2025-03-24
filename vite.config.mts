@@ -21,7 +21,7 @@ export default defineConfig({
     },
     base: `/${repoName}/`,
     build: {
-        outDir: "dist",
+        outDir: "output",
     },
     plugins: [
         solidPlugin(),

@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "start": "fable watch -c Release --optimize --typedArrays false -o output -e .fs.jsx --run vite",
-    "watch": "fable watch -c Release --optimize --typedArrays false -o dist -e .fs.jsx",
-    "build": "dotnet fable -C Release --optimize --typedArrays false -o dist -e .fs.jsx --run vite build",
+    "watch": "fable watch -c Release --optimize --typedArrays false -o output -e .fs.jsx",
+    "build": "dotnet fable -C Release --optimize --typedArrays false -o output -e .fs.jsx --run vite build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d output"
   },
   "dependencies": {
     "@ark-ui/solid": "^5.1.0",

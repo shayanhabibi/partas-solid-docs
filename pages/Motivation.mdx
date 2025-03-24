@@ -1,12 +1,13 @@
-import { AnimatedShinyText } from "../dist/ui/text/AnimatedShinyText.fs.jsx";
-import { AccordionExample } from "../dist/examples/MotivationPage.fs.jsx";
+import { AnimatedShinyText } from "../output/ui/text/AnimatedShinyText.fs.jsx";
+import { AccordionExample } from "../output/examples/MotivationPage.fs.jsx";
+import { OxpeckerSolidLink, SolidLink, SolidUILink, ShadcnLink } from "../output/links/Index.fs.jsx";
 
 # Motivation
 
 ## Oxpecker.Solid
 
 **<AnimatedShinyText>Partas</AnimatedShinyText>.Solid** is an opinionated fork of
-[Oxpecker.Solid](https://github.com/lanayx/oxpecker) that keeps the original DSL,
+<OxpeckerSolidLink>Oxpecker.Solid</OxpeckerSolidLink> that keeps the original DSL,
 but more aggressively transforms the F# AST to produce *`correct`* JSX.
 
 ## Cognitive Load of JS in F#
@@ -31,8 +32,8 @@ I can, and still will compose elements into functions, but ***I*** get to decide
 
 ### Motivating Example
 
-Below is the full code of the Accordion component from [solid-ui](https://solid-ui.com/docs/components/accordion)
-(which itself is a [solid-js](https://solid-js.com) implementation of shadcn-ui) in JS.
+Below is the full code of the Accordion component from <SolidUILink>solid-ui</SolidUILink>
+(which itself is a <SolidLink>Solid-js</SolidLink> implementation of <ShadcnLink>shadcn-ui</ShadcnLink>) in JS.
 
 ```jsx showLineNumbers title="JSX"
 import type { JSX, ValidComponent } from "solid-js"
