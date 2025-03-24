@@ -1,0 +1,29 @@
+
+
+# Introduction
+
+[Partas.Solid](https://github.com/shayanhabibi/Partas.Solid) is a plugin for [Fable](https://fable.io/), a F# to JS
+transpiler.
+
+An opinionated fork of [Lanayx's Oxpecker.Solid](https://github.com/lanayx/Oxpecker), the plugin aggressively transforms
+the Fable AST to produce Solid-js compatible JSX. This allows you to have a front end with the performance of Solid-js,
+with the F# language and compiler to prop up your development experience.
+
+## Why something else
+
+This might be a *personal* thing, that I alone feel frustrated by, but I do not like that a DSL to write out HTML/JSX,
+does not allow you to then create, and use components _WITHIN_ the same DSL.
+
+I greatly appreciate, and understand the motivation to build into function calls, following F# idioms, but it does
+not exclude the desire for a seamless, and ubiquitous DSL in reusing components.
+
+**With Partas.Solid, you can create a component library like Shad-cn COMPLETELY within F#, and share it for other users**.
+
+```fsharp
+[<Erase>]
+type SolidComponent() =
+    inherit RegularNode()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        div()
+```

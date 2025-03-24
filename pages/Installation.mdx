@@ -1,0 +1,44 @@
+
+
+# Installation
+
+## Fable 5
+
+Ensure you have Fable 5.0+ installed.
+
+```
+// Create your dotnet tool manifest in a new solution
+dotnet new tool-manifest
+
+// Install fable to solution
+dotnet tool install Fable
+```
+
+> At the time of writing, Fable 5 is still in *alpha*, to install it, you might need to pass the `--prerelease` flag.
+
+## Partas.Solid
+
+With Dotnet:
+
+```
+dotnet add package Partas.Solid
+```
+
+With Paket:
+
+```
+paket install Partas.Solid
+```
+
+## NPM
+
+This gives you everything you need to start (ie you can compile with fable and see the output JSX).
+
+But if you want to build and view components etc, then you'll need to setup
+vite or whatever other builder you want.
+
+You'll then also want to install the NPM dependencies for Solid-js.
+
+```
+npm install solid-js
+```

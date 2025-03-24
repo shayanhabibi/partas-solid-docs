@@ -1,0 +1,135 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="package.json" />
+        <Content Include="index.css" />
+        <Content Include="vite.config.mts" />
+        <Content Include="index.html" />
+        <Content Include="tailwind.config.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="pages\Introduction.mdx" />
+        <Content Include="pages\Installation.mdx" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="bindings\internationalised\Program.fs" />
+        <Compile Include="bindings\zagjs\Popper.fs" />
+        <Compile Include="bindings\zagjs\DatePicker.fs" />
+        <Compile Include="bindings\lucide\Lucide.fs" />
+        <Compile Include="bindings\lucide\LucideLab.fs" />
+        <Compile Include="bindings\libdom\LibDom.fs" />
+        <Compile Include="bindings\libdom\CSSStyleDeclaration.fs" />
+        <Compile Include="bindings\libdom\Types.fs" />
+        <Compile Include="bindings\libdom\Utils.fs" />
+        <Compile Include="bindings\motion\Types.fs" />
+        <Compile Include="bindings\motion\Program.fs" />
+        <Compile Include="bindings\primitives\Primitives.fs" />
+        <Compile Include="bindings\sonner\Program.fs" />
+        <Compile Include="bindings\tanstack\Program.fs" />
+        <Compile Include="bindings\tanstack\Table.fs" />
+        <Compile Include="bindings\tanstack\ColumnFiltering.fs" />
+        <Compile Include="bindings\tanstack\ColumnFaceting.fs" />
+        <Compile Include="bindings\tanstack\ColumnOrdering.fs" />
+        <Compile Include="bindings\tanstack\ColumnPinning.fs" />
+        <Compile Include="bindings\tanstack\ColumnSizing.fs" />
+        <Compile Include="bindings\tanstack\ColumnVisibility.fs" />
+        <Compile Include="bindings\tanstack\GlobalFaceting.fs" />
+        <Compile Include="bindings\tanstack\GlobalFiltering.fs" />
+        <Compile Include="bindings\tanstack\Sorting.fs" />
+        <Compile Include="bindings\tanstack\Grouping.fs" />
+        <Compile Include="bindings\tanstack\Expanding.fs" />
+        <Compile Include="bindings\tanstack\Pagination.fs" />
+        <Compile Include="bindings\tanstack\RowPinning.fs" />
+        <Compile Include="bindings\tanstack\RowSelection.fs" />
+        <Compile Include="bindings\kobalte\Program.fs" />
+        <Compile Include="bindings\corvu\Program.fs" />
+        <Compile Include="bindings\cmdk\Program.fs" />
+        <Compile Include="bindings\arkui\ContextBindings.fs" />
+        <Compile Include="bindings\arkui\Program.fs" />
+        <Compile Include="bindings\apexcharts\Program.fs" />
+        <Compile Include="bindings\apexcharts\Solid.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ui\Utils.fs" />
+        <Compile Include="ui\components\Button.fs" />
+        <Compile Include="ui\components\Accordion.fs" />
+        <Compile Include="ui\components\Alert.fs" />
+        <Compile Include="ui\components\AlertDialog.fs" />
+        <Compile Include="ui\components\Avatar.fs" />
+        <Compile Include="ui\components\Badge.fs" />
+        <Compile Include="ui\components\Breadcrumb.fs" />
+        <Compile Include="ui\components\KobalteButton.fs" />
+        <Compile Include="ui\components\Callout.fs" />
+        <Compile Include="ui\components\Card.fs" />
+        <Compile Include="ui\components\Checkbox.fs" />
+        <Compile Include="ui\components\Collapsible.fs" />
+        <Compile Include="ui\components\Combobox.fs" />
+        <Compile Include="ui\components\Dialog.fs" />
+        <Compile Include="ui\components\Command.fs" />
+        <Compile Include="ui\components\ContextMenu.fs" />
+        <Compile Include="ui\components\Drawer.fs" />
+        <Compile Include="ui\components\DropdownMenu.fs" />
+        <Compile Include="ui\components\HoverCard.fs" />
+        <Compile Include="ui\components\Label.fs" />
+        <Compile Include="ui\components\Menubar.fs" />
+        <Compile Include="ui\components\NavigationMenu.fs" />
+        <Compile Include="ui\components\NumberField.fs" />
+        <Compile Include="ui\components\OtpField.fs" />
+        <Compile Include="ui\components\Pagination.fs" />
+        <Compile Include="ui\components\Popover.fs" />
+        <Compile Include="ui\components\RadioGroup.fs" />
+        <Compile Include="ui\components\Resizeable.fs" />
+        <Compile Include="ui\components\Select.fs" />
+        <Compile Include="ui\components\Separator.fs" />
+        <Compile Include="ui\components\Sheet.fs" />
+        <Compile Include="ui\components\Skeleton.fs" />
+        <Compile Include="ui\components\Slider.fs" />
+        <Compile Include="ui\components\Sonner.fs" />
+        <Compile Include="ui\components\Switch.fs" />
+        <Compile Include="ui\components\Table.fs" />
+        <Compile Include="ui\components\Tabs.fs" />
+        <Compile Include="ui\components\Text.fs" />
+        <Compile Include="ui\components\Timeline.fs" />
+        <Compile Include="ui\components\Toggle.fs" />
+        <Compile Include="ui\components\ToggleGroup.fs" />
+        <Compile Include="ui\components\Tooltip.fs" />
+        <Compile Include="ui\components\Sidebar.fs" />
+        <Compile Include="ui\components\AspectRatio.fs" />
+        <Compile Include="ui\components\DatePicker.fs" />
+        <Compile Include="ui\components\BarList.fs" />
+        <Compile Include="ui\components\DeltaBar.fs" />
+        <Compile Include="ui\components\Progress.fs" />
+        <Compile Include="ui\text\AnimatedShinyText.fs" />
+        <Compile Include="ui\text\WordRotate.fs" />
+        <Compile Include="ui\text\WordPullup.fs" />
+        <Compile Include="ui\text\FlipText.fs" />
+        <Compile Include="ui\text\GradualSpacing.fs" />
+        <Compile Include="ui\text\LetterPullup.fs" />
+        <Compile Include="ui\text\SparklesText.fs" />
+        <Compile Include="ui\text\WordFadeIn.fs" />
+        <Compile Include="ui\layouts\Flex.fs" />
+        <Compile Include="ui\layouts\Grid.fs" />
+        <Compile Include="ui\layouts\Marquee.fs" />
+        <Compile Include="ui\effects\BorderBeam.fs" />
+        <Compile Include="ui\effects\DotPattern.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="MdxImporter.fs" />
+        <Compile Include="NavBar.fs" />
+        <Compile Include="Sidebar.fs" />
+        <Compile Include="MdxStyler.fs" />
+        <Compile Include="App.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Fable.AST" Version="5.0.0-beta.1" />
+      <PackageReference Include="Fable.Core" Version="4.5.0" />
+      <PackageReference Include="Partas.Solid" Version="0.2.27" />
+    </ItemGroup>
+
+</Project>
