@@ -16,6 +16,8 @@ type App() =
             Pages("Getting Started", [|
                 Page("Introduction")
                 Page("Installation")
+                Page("Compiling")
+                Page("Motivation")
             |])
         |]
         SidebarProvider() {
@@ -23,14 +25,13 @@ type App() =
                 NavBar(class' = "sticky top-0 w-full h-12 border-border border-1 shadow-xs bg-background")
                 div(class' = "flex flex-row grow") {
                     AppSidebar(
-                        class' = "sticky max-h-[calc(100vh-(var(--spacing)*12))] w-(--sidebar-width) bg-sidebar/40 border-border border-1 border-t-0",
+                        class' = "bg-background border-border border-1 border-t-0",
                         pages = pages
                     )
                     div(class' = "flex w-full max-h-[calc(100vh-(var(--spacing)*12))] justify-center overflow-y-scroll px-4") {
                         MdxStyler() {
                             props.children
                         }
-                        div(class' = "max-w-(--sidebar-width)")
                     }
                 }
                 

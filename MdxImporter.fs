@@ -6,4 +6,6 @@ open Fable.Core.JsInterop
 open Partas.Solid
 
 let IntroductionPage: TagValue = import "default as Introduction" "./pages/Introduction.mdx"
-let InstallationPage: TagValue = import "default as Installation" "./pages/Installation.mdx" 
+let InstallationPage: TagValue = import "default as Installation" "./pages/Installation.mdx"
+let CompilingPage: TagValue = import "default as Compiling" "./pages/Compiling.mdx"
+let MotivationPage: TagValue = import "default as Motivation" "./pages/Motivation.mdx"

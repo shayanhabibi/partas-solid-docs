@@ -25,6 +25,7 @@ type MdxStyler() =
                "min-w-2/3 pt-12"
                "prose"
                "prose-pre:**:data-highlighted-line:bg-indigo-500/20"
+               "prose-pre:max-h-[600px]"
             |] ) {
                 props.children
                 div(class' = "min-h-12")

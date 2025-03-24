@@ -5,7 +5,7 @@ import mdx from '@mdx-js/rollup';
 import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from "rehype-pretty-code";
 
-const repoName = "Partas.Solid";
+const repoName = "partas-solid-docs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -33,7 +33,10 @@ export default defineConfig({
                 [
                     rehypePrettyCode,
                     {
-                        theme: "one-dark-pro"
+                        grid: true,
+                        theme: "github-dark",
+                        keepBackground: true,
+                        bypassInlineCode: false,
                     }
                 ]
             ],

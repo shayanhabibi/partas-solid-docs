@@ -8,6 +8,7 @@ open Partas.Solid
 open Partas.Solid.Polymorphism
 open Partas.Solid.Router
 open Partas.Solid.Motion
+open Partas.Solid.UI.Context
 
 [<JS.Pojo>]
 type Page(
@@ -70,17 +71,19 @@ type AppSidebar() =
     [<Erase>] member val pages: Pages[] = unbox null with get,set
     [<SolidTypeComponentAttribute>]
     member props.constructor =
-        props.collapsible <- sidebar.Collapsible.None
-        props.variant <- sidebar.Variant.Inset
         props.pages <- [||]
+        let isMobile = useIsMobile(false)
+        let ctx = useSidebar()
+        let collapsible = fun () -> if isMobile() then sidebar.Collapsible.OffCanvas else sidebar.Collapsible.None
         
         Sidebar(
-            collapsible = props.collapsible,
-            variant = props.variant
+            collapsible = collapsible()
         ).spread(props) {
             
             SidebarHeader() {
                 // SidebarInput()
+            if isMobile() then
+                SidebarMenuAction(onClick = fun _ -> ctx.setOpenMobile(false)) { X() }
             }
             
             SidebarContent(
@@ -90,14 +93,14 @@ type AppSidebar() =
                         PageGroup().spread pages
                 }
             }
-            
+
             SidebarFooter() {
                 SidebarMenu() {
                     SidebarMenuItem(class' = "flex gap-2 items-center") {
                         Motion(
                             hover = JsInterop.jsOptions<MotionStyle>(
                                 fun o ->
-                                    o.scale <- unbox 1.05
+                                    o.scale <- unbox 1.10
                             )
                         ) {
                             Button(variant = button.variant.ghost, size = button.size.icon).as'(a(href="https://github.com/shayanhabibi/Partas.Solid")) {

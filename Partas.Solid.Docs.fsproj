@@ -15,6 +15,8 @@
     <ItemGroup>
         <Content Include="pages\Introduction.mdx" />
         <Content Include="pages\Installation.mdx" />
+        <Content Include="pages\Compiling.mdx" />
+        <Content Include="pages\Motivation.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="bindings\internationalised\Program.fs" />
@@ -119,6 +121,7 @@
         <Compile Include="ui\effects\DotPattern.fs" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="examples\MotivationPage.fs" />
         <Compile Include="MdxImporter.fs" />
         <Compile Include="NavBar.fs" />
         <Compile Include="Sidebar.fs" />

@@ -1,0 +1,256 @@
+import { AnimatedShinyText } from "../dist/ui/text/AnimatedShinyText.fs.jsx";
+import { AccordionExample } from "../dist/examples/MotivationPage.fs.jsx";
+
+# Motivation
+
+## Oxpecker.Solid
+
+**<AnimatedShinyText>Partas</AnimatedShinyText>.Solid** is an opinionated fork of
+[Oxpecker.Solid](https://github.com/lanayx/oxpecker) that keeps the original DSL,
+but more aggressively transforms the F# AST to produce *`correct`* JSX.
+
+## Cognitive Load of JS in F#
+
+The only reason I have approached this environment is
+due to the monumentous market share of web technology that JS has a part in.
+
+Fable is fantastic for allowing me to use a language with a great development experience,
+part of a rich ecosystem (`dotnet`), to produce front ends in proven `JS` technologies, with a
+**massive** ecosystem of open source examples, guides, component examples, and other.
+
+The primary goal of this plugin, is to allow you to write your front end in Fable, but to also
+make porting examples of components in JSX to Fable as seemless as possible.
+
+## DSL
+
+As mentioned before, the most significant factor is that I can compose, and then utilise my own
+components with ***the same DSL***.
+
+This provides a far more enjoyable reading experience in my personal opinion.
+I can, and still will compose elements into functions, but ***I*** get to decide when, or even if.
+
+### Motivating Example
+
+Below is the full code of the Accordion component from [solid-ui](https://solid-ui.com/docs/components/accordion)
+(which itself is a [solid-js](https://solid-js.com) implementation of shadcn-ui) in JS.
+
+```jsx showLineNumbers title="JSX"
+import type { JSX, ValidComponent } from "solid-js"
+import { splitProps } from "solid-js"
+ 
+import * as AccordionPrimitive from "@kobalte/core/accordion"
+import type { PolymorphicProps } from "@kobalte/core/polymorphic"
+ 
+import { cn } from "~/lib/utils"
+ 
+const Accordion = AccordionPrimitive.Root
+ 
+type AccordionItemProps<T extends ValidComponent = "div"> =
+  AccordionPrimitive.AccordionItemProps<T> & {
+    class?: string | undefined
+  }
+ 
+const AccordionItem = <T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, AccordionItemProps<T>>
+) => {
+  const [local, others] = splitProps(props as AccordionItemProps, ["class"])
+  return <AccordionPrimitive.Item class={cn("border-b", local.class)} {...others} />
+}
+ 
+type AccordionTriggerProps<T extends ValidComponent = "button"> =
+  AccordionPrimitive.AccordionTriggerProps<T> & {
+    class?: string | undefined
+    children?: JSX.Element
+  }
+ 
+const AccordionTrigger = <T extends ValidComponent = "button">(
+  props: PolymorphicProps<T, AccordionTriggerProps<T>>
+) => {
+  const [local, others] = splitProps(props as AccordionTriggerProps, ["class", "children"])
+  return (
+    <AccordionPrimitive.Header class="flex">
+      <AccordionPrimitive.Trigger
+        class={cn(
+          "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-expanded]>svg]:rotate-180",
+          local.class
+        )}
+        {...others}
+      >
+        {local.children}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="size-4 shrink-0 transition-transform duration-200"
+        >
+          <path d="M6 9l6 6l6 -6" />
+        </svg>
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  )
+}
+ 
+type AccordionContentProps<T extends ValidComponent = "div"> =
+  AccordionPrimitive.AccordionContentProps<T> & {
+    class?: string | undefined
+    children?: JSX.Element
+  }
+ 
+const AccordionContent = <T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, AccordionContentProps<T>>
+) => {
+  const [local, others] = splitProps(props as AccordionContentProps, ["class", "children"])
+  return (
+    <AccordionPrimitive.Content
+      class={cn(
+        "animate-accordion-up overflow-hidden text-sm transition-all data-[expanded]:animate-accordion-down",
+        local.class
+      )}
+      {...others}
+    >
+      <div class="pb-4 pt-0">{local.children}</div>
+    </AccordionPrimitive.Content>
+  )
+}
+ 
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+```
+
+Here is that same code in **<AnimatedShinyText>Partas</AnimatedShinyText>.Solid**:
+
+```fsharp showLineNumbers title="F#"
+namespace Partas.Solid.UI
+
+open Partas.Solid
+open Fable.Core
+open Partas.Solid.Kobalte
+open Partas.Solid.Lucide
+
+
+[<Erase>]
+type AccordionItem() =
+    inherit Accordion.Item()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        Accordion.Item(class' = Lib.cn [| "border-b"; props.class' |])
+            .spread props
+
+[<Erase>]
+type AccordionTrigger() =
+    inherit Accordion.Trigger()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        Accordion.Header(class' = "flex") {
+            Accordion.Trigger(class' = Lib.cn [|
+                "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-expanded]>svg]:rotate-180"
+                props.class'
+            |]).spread props {
+                props.children
+                Lucide.ChevronDown(strokeWidth = 2, class' = "size-4 shrink-0 transition-transform duration-300")
+            }
+        }
+
+[<Erase>]
+type AccordionContent() =
+    inherit Accordion.Content()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        Accordion.Content(class' = Lib.cn [|
+            "animate-accordion-up overflow-hidden text-sm transition-all data-[expanded]:animate-accordion-down"
+            props.class'
+        |]).spread props {
+            div(class' = "pb-4 pt-0") {
+                props.children
+            }
+        }
+
+[<Erase>]
+type Accordion() =
+    inherit Kobalte.Accordion()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        Kobalte.Accordion().spread props
+```
+
+---
+
+Here is an example usage from solid-ui
+
+```jsx showLineNumbers title="JSX"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "~/components/ui/accordion"
+ 
+export function AccordionDemo() {
+  return (
+    <Accordion multiple={false} collapsible class="w-full">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Is it accessible?</AccordionTrigger>
+        <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Is it styled?</AccordionTrigger>
+        <AccordionContent>
+          Yes. It comes with default styles that matches the other components' aesthetic.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Is it animated?</AccordionTrigger>
+        <AccordionContent>
+          Yes. It's animated by default, but you can disable it if you prefer.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+And now, in **<AnimatedShinyText>Partas</AnimatedShinyText>.Solid**:
+
+```fsharp showLineNumbers title="F#"
+module Partas.Solid.Docs.examples.MotivationPage
+
+open Partas.Solid
+open Partas.Solid.UI
+open Fable.Core
+open Fable.Core.JsInterop
+
+[<SolidComponent>]
+let AccordionExample () =
+    Accordion(
+        multiple = false,
+        collapsible = true,
+        // 'not-prose' disables the markdown styling
+        class' = "not-prose w-full max-w-3xl align-center"
+    ) {
+        AccordionItem(value = "item-1")
+            {
+                AccordionTrigger() { "Is it accessible?" }
+                AccordionContent() { "Yes, it adheres to the WAI-
+                                     ARIA design pattern." }
+            }
+        AccordionItem(value = "item-2")
+            {
+                AccordionTrigger() { "Is it styled?" }
+                AccordionContent() { "Yes, it comes with default
+                                     styles that matches the other
+                                     components' aesthetic." }
+            }
+        AccordionItem(value = "item-3")
+            {
+                AccordionTrigger() { "Is it animated?" }
+                AccordionContent() { "Yes, it's animated by default,
+                                     but you can disable it if you prefer" }
+            }   
+    }
+
+```
+
+<AccordionExample />

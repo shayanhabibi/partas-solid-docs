@@ -13,9 +13,11 @@ importAll "./index.css"
 [<SolidComponent>]
 let Root () =
     HashRouter(root = !@App) {
-        Route(path = "")
+        Route(path = "", component' = IntroductionPage)
         Route(path = "introduction", component' = IntroductionPage)
         Route(path = "installation", component' = InstallationPage)
+        Route(path = "compiling", component' = CompilingPage)
+        Route(path = "motivation", component' = MotivationPage)
     }
 
 render(Root, document.getElementById "root")

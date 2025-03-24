@@ -8,17 +8,21 @@ open Partas.Solid.Lucide
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Core.JS
+open Partas.Solid.UI.Context
 
 [<Erase>]
 type NavBar() =
     inherit VoidNode()
     [<SolidTypeComponentAttribute>]
     member props.constructor =
+        let isMobile = useIsMobile(false)
         div(class' = Lib.cn [|
-            "flex gap-8 px-8 items-center justify-between"
+            "flex gap-8 pr-8 items-center justify-between"
             props.class'
         |]).spread(props) {
-            div() {
+            div(class' = if isMobile() then "flex flex-row pl-2 gap-2" else "pl-8" ) {
+                if isMobile() then
+                    SidebarTrigger()
                 span(class' = "text-2xl font-bold") {
                     AnimatedShinyText() { "Partas" }
                     ".Solid"
