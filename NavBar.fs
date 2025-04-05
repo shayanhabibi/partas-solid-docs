@@ -8,14 +8,14 @@ open Partas.Solid.Lucide
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Core.JS
-open Partas.Solid.UI.Context
+open Partas.Solid.Primitives
 
 [<Erase>]
 type NavBar() =
     inherit VoidNode()
     [<SolidTypeComponentAttribute>]
     member props.constructor =
-        let isMobile = useIsMobile(false)
+        let isMobile = Media.createMediaQuery $"(max-width:{768 - 1}px)"
         div(class' = Lib.cn [|
             "flex gap-8 pr-8 items-center justify-between"
             props.class'

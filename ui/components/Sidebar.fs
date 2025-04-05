@@ -64,15 +64,7 @@ module Context =
         else context
         
     let useIsMobile (fallback: bool) =
-        let (isMobile, setIsMobile) = createSignal(fallback)
-        createEffect(
-                fun () ->
-                    let mobileBreakpointListener =
-                            Media.makeMediaQueryListener
-                                $"(max-width:{mobileBreakpoint - 1}px"
-                                (fun event -> setIsMobile(event.matches))
-                    onCleanup(mobileBreakpointListener)
-            )
+        let isMobile = Media.createMediaQuery $"(max-width:{768 - 1}px)"
         isMobile
 
 [<Erase>]
