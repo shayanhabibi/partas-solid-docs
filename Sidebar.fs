@@ -37,8 +37,14 @@ type PageItem() =
     member props.constructor =        
         let href = createMemo(fun () ->
             props.href |> Option.defaultValue props.title |> _.ToLowerInvariant())
+        let ctx = useSidebar()
         SidebarMenuItem() {
-            SidebarMenuButton(tooltip = props.title, class' = "group/mbutton").as'(A(href = href())) {
+            SidebarMenuButton(
+                tooltip = props.title,
+                class' = "group/mbutton",
+                onClick = fun _ ->
+                    if ctx.isMobile() && ctx.openMobile() then ctx.setOpenMobile(false)
+                    ).as'(A(href = href())) {
                 if unbox props.icon then
                     (unbox<TagValue> props.icon) % {| class' = "size-4" |}
                 Separator(orientation = Orientation.Vertical, class' = "group-hover/mbutton:bg-black/20 in-aria-[current=page]:bg-black transition-colors group-hover/mbutton:in-aria-[current=page]:bg-black")

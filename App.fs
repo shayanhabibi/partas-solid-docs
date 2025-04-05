@@ -21,19 +21,21 @@ type App() =
             |])
         |]
         SidebarProvider() {
-            div(class' = "flex flex-col w-full max-h-screen") {
-                NavBar(class' = "sticky top-0 w-full h-12 border-border border-1 shadow-xs bg-background")
-                div(class' = "flex flex-row grow") {
+            div(class' = "grid w-full max-h-full grid-flow-row-dense") {
+                NavBar(class' = "max-h-12 border-border border-1 shadow-xs bg-background")
+                div(class' = "grid grid-flow-col-dense grid-rows-1") {
                     AppSidebar(
-                        class' = "bg-background border-border border-1 border-t-0",
+                        class' = "col-span-1 place-self-start bg-background border-border border-r-1",
                         pages = pages
                     )
-                    div(class' = "flex w-full max-h-[calc(100vh-(var(--spacing)*12))] justify-center overflow-y-scroll px-4") {
+                    div(class' = "col-span-10 place-self-stretch flex w-full max-h-[calc(100vh-(var(--spacing)*12))] justify-center overflow-y-scroll px-4") {
                         MdxStyler() {
                             props.children
                         }
                     }
+                    div(class' = "col-span-1")
                 }
+            
                 
             }
         }
