@@ -1,0 +1,90 @@
+import { AnimatedShinyText } from "../output/ui/text/AnimatedShinyText.fs.jsx";
+import { ButtonExample } from "../output/examples/OverviewPage.fs.jsx";
+
+# Overview
+
+Solid-js operates under the modus operandi of *everything is a function*.
+
+<AnimatedShinyText>Partas</AnimatedShinyText>.Solid provides two methods to create functions which are compiled into HtmlElements.
+
+### SolidComponent
+
+The first is applicable to any `let` binding:
+
+```fsharp
+open Partas.Solid
+open Fable.Core
+
+[<Erase>]
+type ButtonVariant =
+    | Primary
+    | Ghost
+
+[<SolidComponent>]
+let Button (title: string) (variant: ButtonVariant) =
+    button(class' = match variant with
+                    | Primary -> "bg-primary text-primary-foreground"
+                    | Ghost -> "bg-background") { title }
+
+[<SolidComponent>]
+let ButtonExample () =
+    let variant, setVariant = createSignal(Ghost)
+    div(class' = "flex justify-center w-full gap-x-2") {
+        Button "Primary" Primary
+        Button "Ghost" Ghost
+        Button "Responsive" (variant())
+        button(onClick = fun _ ->
+            if variant() = Primary
+            then Ghost
+            else Primary
+            |> setVariant) { "Click me" }
+    }
+```
+
+<ButtonExample></ButtonExample>
+
+### SolidTypeComponent
+
+The second is applied to custom tags.
+
+In Partas.Solid, you can define a custom tag which inherits from RegularNode (if the element accepts children), or VoidNode (if the element does not accept children).
+
+To be valid, the tags must be defined within a namespace that begins with `Partas.Solid`.
+
+```fsharp
+module Partas.Solid.MyComponent
+
+open Fable.Core
+open Partas.Solid
+
+[<Erase>]
+type MyComponent() =
+    inherit RegularNode()
+    [<Erase>] member val myAttribute: bool = false with get,set
+```
+
+These can then be used like the predefined tags:
+
+```fsharp
+MyComponent(myAttribute = true, class' = "MyClass") { "text" }
+```
+
+This allows you to interop with other JS libraries using Fables ImportAttribute. `SolidTypeComponent` allows you to compile a function that shares the type name, allowing you to define the attributes of a component and its implementation in the same type definition.
+
+```fsharp
+namespace Partas.Solid.MyComponent
+open Partas.Solid
+open Fable.Core
+
+[<Erase>]
+type MyComponent() =
+    inherit RegularNode()
+    [<Erase>] member val myAttribute: bool = JS.undefined with get,set
+    [<SolidTypeComponent>]
+    member props.constructor =
+        let buttonText =
+            if props.myAttribute then
+                "MyComponent"
+            else "Button"
+        button() { buttonText }
+```

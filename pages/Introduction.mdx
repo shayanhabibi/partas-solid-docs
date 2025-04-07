@@ -17,15 +17,6 @@ does not allow you to then create, and use components _WITHIN_ the same DSL.
 I greatly appreciate, and understand the motivation to build into function calls, following F# idioms, but it does
 not exclude the desire for a seamless, and ubiquitous DSL in reusing components.
 
-**With Partas.Solid, you can create a component library like Shad-cn COMPLETELY within F#, and share it for other users**.
-
-```fsharp
-[<Erase>]
-type SolidComponent() =
-    inherit RegularNode()
-    [<SolidTypeComponent>]
-    member props.constructor =
-        div()
-```
+**With Partas.Solid, you can create a component library like shad-cn COMPLETELY within F#, and share it for other users**.
 
 > All this documentation is written in F#, transpiled with Fable and Partas.Solid with MDX for content.

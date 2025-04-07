@@ -1,0 +1,63 @@
+# SolidTypeComponent
+
+SolidTypeComponent attribute allows you to define a component implementation for a custom tag type.
+
+```fsharp
+namespace Partas.Solid.MyComponent
+open Partas.Solid
+open Fable.Core
+
+[<Erase>]
+type CustomTag() =
+    inherit RegularNode()
+    [<Erase>] member val customAttribute: string = JS.undefined with get,set
+    [<SolidTypeComponent>]
+    member props.constructor =
+        div()
+```
+
+There are 3 requirements for a `SolidTypeComponent` to be valid:
+1. Type is defined within a namespace that starts with `Partas.Solid`
+2. The instance identifier must be named `props`
+3. The member must have no arguments or parameters otherwise
+
+### Accessing properties
+
+Within the component implementation, you can access the passed properties via the `props` self-identifier.
+
+## Properties Magics and Gotchas
+
+### Property Defaults
+
+Defining the default of a property within an implementation simply requires you to assign a value to the property via the `props`-self identifier.
+
+This can be done at any point of the implementation, but is limited (naturally) to there being no more than one default for a particular property.
+
+Using the previous example:
+
+```fsharp
+[<SolidTypeComponent>]
+member props.constructor =
+    props.customAttribute <- "default value" // Setting default value
+    div() {
+        props.customAttribute // Accessing attributes
+    }
+```
+
+### SplitProps, MergeProps
+
+Assigning default property values uses Solid-js mergeProps primitive to maintain reactivity. All assignments are collected and compiled into the top position of the implementation with `mergeProps`.
+
+On the flip-side, accessing any property uses Solid-js splitProps primitive.
+
+> This is done so that if and/or when you decide to `spread` the props identifier, you do not have to be concerned with splitting props to maintain reactivity
+
+All property accesses are collected and compiled after the `mergeProps` of the implementation using `splitProps`.
+
+This identifies **THE FIRST GOTCHA**:
+
+> If at any point you want to spread the `props` identifier, be aware that any property accesses you have performed will exclude them from the spread.
+>
+> This is preferred usually.
+>
+> However, in the case where you want all `props` to be passed (including ones you have already accessed elsewhere) you will have to manually pass those properties to the child element.

@@ -18,6 +18,8 @@ let Root () =
         Route(path = "installation", component' = InstallationPage)
         Route(path = "compiling", component' = CompilingPage)
         Route(path = "motivation", component' = MotivationPage)
+        Route(path = "overview", component' = OverviewPage)
+        Route(path = "solidtypecomponent", component' = SolidTypeComponentPage)
     }
 
 render(Root, document.getElementById "root")
