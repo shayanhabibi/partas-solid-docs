@@ -9,14 +9,83 @@ An opinionated fork of Lanayx's <OxpeckerSolidLink>Oxpecker.Solid</OxpeckerSolid
 the Fable AST to produce Solid-js compatible JSX. This allows you to have a front end with the performance of Solid-js,
 with the F# language and compiler to prop up your development experience.
 
-## Why something else
+# Why Partas.Solid
 
-This might be a *personal* thing, that I alone feel frustrated by, but I do not like that a DSL to write out HTML/JSX,
-does not allow you to then create, and use components _WITHIN_ the same DSL.
+<PartasSolidLink>Partas.Solid</PartasSolidLink> differs from other front end plugins in F# in its overarching goal:
 
-I greatly appreciate, and understand the motivation to build into function calls, following F# idioms, but it does
-not exclude the desire for a seamless, and ubiquitous DSL in reusing components.
+> To define a DSL that allows building HTML/JSX trees for native, imported, **and** user defined components
 
-**With Partas.Solid, you can create a component library like shad-cn COMPLETELY within F#, and share it for other users**.
+## What this means
 
-> All this documentation is written in F#, transpiled with Fable and Partas.Solid with MDX for content.
+Many front-end frameworks define a DSL that allows you to build a tree of native elements such as **Feliz**
+
+```fsharp title="Feliz DSL"
+[<ReactComponent>]
+let MyComponent () =
+    Html.div [
+        prop.className "flex justify-center"
+        prop.children [
+            Html.button [
+                prop.className "bg-primary text-primary"
+                prop.text "Button"
+            ]
+        ]
+    ]
+```
+
+But it is not possible to then use components in the same DSL. Your components are built into functions or static members. Static members would be the closest you could get to the flexibility of having optional properties/attributes.
+
+You can interop with JS libraries, but the process can be laborious since you have to use various interop functions like mkProperty or createElement.
+
+### Oxpecker Style - A giant leap
+
+```fsharp title="Oxpecker DSL"
+[<SolidComponent>]
+let MyComponent () =
+    div(class' = "flex justify-center") {
+        button(class' = "bg-primary text-primary") {
+            "Button
+        }
+    }
+```
+
+<OxpeckerSolidLink>Oxpecker</OxpeckerSolidLink> provides a DSL that is significantly superior in my view, as it more closely resembles JSX/Html, and provides better readability when distinguishing between attributes and children etc.
+
+Unfortunately, Oxpecker.Solid does not provide the functionality to fulfill the overarching goal above, as you cannot define components that are usable in the same DSL.
+
+This is because Oxpecker.Solid has a divergent opinionated goal, which is to provide a clean, performant, and minimally intrusive plugin transformation to interop with Solid-js.
+
+### Partas.Solid - Taking a run-up before the leap
+
+```fsharp title="Partas expanded Oxpecker DSL"
+type CenteredButton() =
+    inherit button()
+    [<SolidTypeComponent>]
+    member props.constructor =
+        div(class' = "flex justify-center") { button().spread props }
+        
+// ...
+
+[<SolidComponent>]
+let MyComponent () =
+    CenteredButton(class' = "bg-primary text-primary") { "Button" }
+```
+
+While this fork moves towards its own opinionated goal, most (if not all) functionality of Oxpecker.Solid is adopted by Partas.Solid.
+
+The larger breadth that Partas.Solid takes leads to more laborious and cumbersome requirements and development of the plugin API surface. But the end result is a more expansive and flexible developer experience.
+
+#### Supporting Development
+
+Every effort is taken to provide explanatory documentation in the plugin, with a suite of expanding tests which convey the promises of the plugin goal.
+
+The plugin will have continual support, and will benefit from:
+1. Issues - identifying edge cases/issues will make the plugin more robust as they are fixed
+2. Stars - because we all like validation, and it helps with (1)
+3. Documentation - because we want the plugin to be easy to grok
+4. Tests - because this makes the plugin more robust
+
+And obviously any financial support goes a long way to providing me food.
+
+
+

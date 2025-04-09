@@ -1,8 +1,6 @@
 # SolidTypeComponent
 
-SolidTypeComponent attribute allows you to define a component implementation for a custom tag type.
-
-```fsharp
+```fsharp "Partas.Solid" "props"
 namespace Partas.Solid.MyComponent
 open Partas.Solid
 open Fable.Core
@@ -16,24 +14,14 @@ type CustomTag() =
         div()
 ```
 
-There are 3 requirements for a `SolidTypeComponent` to be valid:
+SolidTypeComponent attribute allows you to define a component implementation for a custom tag type.
+
+**There are 3 requirements for a `SolidTypeComponent` to be valid:**
 1. Type is defined within a namespace that starts with `Partas.Solid`
 2. The instance identifier must be named `props`
 3. The member must have no arguments or parameters otherwise
 
-### Accessing properties
-
-Within the component implementation, you can access the passed properties via the `props` self-identifier.
-
 ## Properties Magics and Gotchas
-
-### Property Defaults
-
-Defining the default of a property within an implementation simply requires you to assign a value to the property via the `props`-self identifier.
-
-This can be done at any point of the implementation, but is limited (naturally) to there being no more than one default for a particular property.
-
-Using the previous example:
 
 ```fsharp
 [<SolidTypeComponent>]
@@ -43,6 +31,16 @@ member props.constructor =
         props.customAttribute // Accessing attributes
     }
 ```
+
+### Accessing properties
+
+Within the component implementation, you can access the passed properties via the `props` self-identifier.
+
+### Property Defaults
+
+Defining the default of a property within an implementation simply requires you to assign a value to the property via the `props`-self identifier.
+
+This can be done at any point of the implementation, but is limited (naturally) to there being no more than one default for a particular property.
 
 ### SplitProps, MergeProps
 
@@ -57,7 +55,64 @@ All property accesses are collected and compiled after the `mergeProps` of the i
 This identifies **THE FIRST GOTCHA**:
 
 > If at any point you want to spread the `props` identifier, be aware that any property accesses you have performed will exclude them from the spread.
->
-> This is preferred usually.
->
-> However, in the case where you want all `props` to be passed (including ones you have already accessed elsewhere) you will have to manually pass those properties to the child element.
+
+This behaviour is preferred usually.
+
+However, in the case where you want all `props` to be passed (including ones you have already accessed elsewhere) you will have to manually pass those properties to the child element.
+
+```fsharp
+[<SolidTypeComponent>]
+member props.constructor =
+    div(class' = props.class') {
+        // button().spread props
+        button(class' = props.class').spread props
+    }
+```
+
+### Aliasing properties
+
+There may be cases where, for the sake of Interop with another library, you are required to compile JS properties with naming schemes that would require the use of double backticks in F# (eg: `my-attribute`).
+
+In cases like this, you can still simplify the developer experience by providing an alias to the property without overburdening the plugin to support a new infinitum number of naming schemes etc.
+
+This is done using `inline` setters and getters:
+
+```fsharp "inline"
+namespace Partas.Solid.MyComponent
+open Partas.Solid
+open Fable.Core
+
+[<Import("SomeComponent", "SomeLibrary")>]
+type MyComponent() =
+    inherit RegularNode()
+    [<Erase>]
+    member val ``my-attribute``: string = JS.undefined with get,set
+    member this.myAttribute
+        [<Erase>]
+        with inline get(): string = this.``my-attribute``
+        [<Erase>]
+        and inline set(value: string) = this.``my-attribute`` <- value
+```
+
+There are several special attribute prefixes which modify the compiled identifiers or output which are discussed later in their own relevant sections.
+
+## Passing Components as Values
+
+A `SolidTypeComponent` can be passed as a value by wrapping it in the TagValue object. They can then be rendered into a tag by calling render.
+
+```fsharp
+let Comp = TagValue(MyComponent)
+Comp.render()
+```
+
+### Operator Overloads
+
+You can also use the `!@` and `%` Operator overloads to perform the above actions.
+
+```fsharp
+let Comp = !@MyComponent
+// a tagvalue can render the property set of an anonymous record
+Comp % {| ``class`` = "class" |}
+// a tagvalue can render the property set of any element
+Comp % div(class' = "class")
+```

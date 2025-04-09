@@ -38,8 +38,8 @@ type NavBar() =
                             hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground
                             focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50
                             data-[expanded]:bg-accent/50",
-                        href = ""
-                    ) { "Docs" }
+                        href = "https://github.com/shayanhabibi/Partas.Solid"
+                    ) { "Source" }
                     NavigationMenuItem() {
                         NavigationMenuTrigger() {
                             "Ecosystem" ; NavigationMenuIcon()

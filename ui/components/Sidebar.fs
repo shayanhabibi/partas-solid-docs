@@ -97,7 +97,7 @@ type SidebarProvider() =
             onCleanup( fun () -> window.removeEventListener("keydown", !!handleKeyDown))
         )
         
-        let state () = if open'() then Expanded else Collapsed
+        let state = fun () -> if open'() then Expanded else Collapsed
         let contextValue = {|
                 state = state
                 open' = open'
@@ -453,7 +453,7 @@ type SidebarMenuButton() =
         Show(when' = !!props.tooltip, fallback = !!bakedButton) {
             Tooltip(placement = Kobalte.Placement.right) {
                 TooltipTrigger(class' = "w-full") { bakedButton }
-                TooltipContent(hidden = !!(state() <> State.Collapsed || isMobile())) { props.tooltip }
+                TooltipContent(hidden = !!((state() <> State.Collapsed) || isMobile())) { props.tooltip }
             }
         }
 

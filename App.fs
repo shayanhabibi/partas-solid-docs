@@ -13,17 +13,28 @@ type App() =
     [<SolidTypeComponentAttribute>]
     member props.constructor =
         let pages = [|
-            Pages("Getting Started", [|
+            Pages("Why Partas.Solid", [|
                 Page("Introduction")
-                Page("Installation")
-                Page("Compiling")
                 Page("Motivation")
             |])
-            Pages("Documentation", [|
-                Page("Overview")
+            Pages("Getting Started", [|
+                Page("Installation")
+                Page("Compiling")
+                Page("Usage Overview", href = "overview")
+            |])
+            Pages("Guides", [|
                 Page("SolidTypeComponent")
+                Page("Spread")
+                Page("Context Providers", href = "context_providers")
+                Page("Polymorphism")
+                Page("Special/Custom Builders", href = "special_builders")
+            |])
+            Pages("Issue Reporting", [|
+                Page("Debugging")
+                Page("Common Issues", href = "common_issues")
             |])
         |]
+        // todo - if i set default open here then it correctly prevents tooltip, but then disables toggle
         SidebarProvider() {
             div(class' = "grid w-full max-w-full max-h-full grid-flow-row-dense") {
                 NavBar(class' = "row-span-1 max-h-12 h-12 border-border border-1 shadow-xs bg-background")
@@ -37,7 +48,6 @@ type App() =
                             props.children
                         }
                     }
-                    div(class' = "col-span-1")
                 }
             
                 

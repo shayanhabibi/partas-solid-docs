@@ -19,6 +19,12 @@
         <Content Include="pages\Motivation.mdx" />
         <Content Include="pages\Overview.mdx" />
         <Content Include="pages\SolidTypeComponent.mdx" />
+        <Content Include="pages\Spread.mdx" />
+        <Content Include="pages\ContextProviders.mdx" />
+        <Content Include="pages\Polymorphism.mdx" />
+        <Content Include="pages\SpecialBuilders.mdx" />
+        <Content Include="pages\Debugging.mdx" />
+        <Content Include="pages\CommonIssues.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="bindings\internationalised\Program.fs" />
@@ -125,6 +131,8 @@
     <ItemGroup>
         <Compile Include="examples\MotivationPage.fs" />
         <Compile Include="examples\OverviewPage.fs" />
+        <Compile Include="examples\SpreadPage.fs" />
+        <Compile Include="examples\SpecialBuildersPage.fs" />
         <Compile Include="MdxImporter.fs" />
         <Compile Include="NavBar.fs" />
         <Compile Include="Sidebar.fs" />
@@ -133,6 +141,7 @@
         <Compile Include="Program.fs" />
         <Compile Include="links\Component.fs" />
         <Compile Include="links\Index.fs" />
+        <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Fable.AST" Version="5.0.0-beta.1" />
