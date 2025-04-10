@@ -33,6 +33,9 @@ type App() =
                 Page("Debugging")
                 Page("Common Issues", href = "common_issues")
             |])
+            // Pages("Dev", [|
+            //     Page("Plugin")
+            // |])
         |]
         // todo - if i set default open here then it correctly prevents tooltip, but then disables toggle
         SidebarProvider() {

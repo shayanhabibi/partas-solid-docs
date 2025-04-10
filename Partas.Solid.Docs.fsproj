@@ -25,6 +25,7 @@
         <Content Include="pages\SpecialBuilders.mdx" />
         <Content Include="pages\Debugging.mdx" />
         <Content Include="pages\CommonIssues.mdx" />
+        <Content Include="pages\Plugin.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="bindings\internationalised\Program.fs" />

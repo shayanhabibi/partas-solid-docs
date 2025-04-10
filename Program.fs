@@ -26,6 +26,7 @@ let Root () =
         Route(path = "special_builders", component' = SpecialBuildersPage)
         Route(path = "debugging", component' = DebuggingPage)
         Route(path = "common_issues", component' = CommonIssuesPage)
+        Route(path = "plugin", component' = PluginPage)
     }
 
 render(Root, document.getElementById "root")

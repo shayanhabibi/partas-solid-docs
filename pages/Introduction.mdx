@@ -51,7 +51,19 @@ let MyComponent () =
 
 <OxpeckerSolidLink>Oxpecker</OxpeckerSolidLink> provides a DSL that is significantly superior in my view, as it more closely resembles JSX/Html, and provides better readability when distinguishing between attributes and children etc.
 
-Unfortunately, Oxpecker.Solid does not provide the functionality to fulfill the overarching goal above, as you cannot define components that are usable in the same DSL.
+You can define new tags to interop with libraries:
+
+```fsharp
+namespace Partas.Solid.SomeLibrary
+open Partas.Solid
+open Fable.Core
+[<Import("SomeComponent", "SomeLibrary")>]
+type SomeComponent() =
+    inherit RegularNode()
+    [<Erase>] member val someAttribute: string = JS.undefined with get,set
+```
+
+Unfortunately, Oxpecker.Solid does not provide the functionality to fulfill the overarching goal above, as you cannot have **user-defined** components that are usable in the same DSL.
 
 This is because Oxpecker.Solid has a divergent opinionated goal, which is to provide a clean, performant, and minimally intrusive plugin transformation to interop with Solid-js.
 

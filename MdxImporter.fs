@@ -17,3 +17,4 @@ let PolymorphismPage: TagValue = import "default as PolymorphismPage" "./pages/P
 let SpecialBuildersPage: TagValue = import "default as SpecialBuildersPage" "./pages/SpecialBuilders.mdx"
 let DebuggingPage: TagValue = import "default as DebuggingPage" "./pages/Debugging.mdx"
 let CommonIssuesPage: TagValue = import "default as CommonIssuesPage" "./pages/CommonIssues.mdx"
+let PluginPage: TagValue = import "default as PluginPage" "./pages/Plugin.mdx"

@@ -1,0 +1,64 @@
+This section describes the salient elements of the Plugin to help onboard anyone who wishes to develop on it, or utilise similar patterns.
+
+# Architecture
+
+```ansi title="File Structure"
+Partas.Solid.FablePlugin
+|-- Types.fs
+|-- Utils.fs
+|-- Spec.fs
+|__ Plugin.fs
+```
+
+The plugin is divided into compartments
+
+---
+
+## Types
+
+```ansi title="File Structure" "Types.fs"
+Partas.Solid.FablePlugin
+|-- Types.fs
+|-- Utils.fs
+|-- Spec.fs
+|__ Plugin.fs
+```
+
+Contains DUs, types, and functions relating to those types.
+
+---
+## Utils
+
+```ansi title="File Structure" "Utils.fs"
+Partas.Solid.FablePlugin
+├⎯ Types.fs
+├⎯ Utils.fs
+├⎯ Spec.fs
+⎣⎯ Plugin.fs
+```
+
+Contains utilities that are frequently used to simplify pattern recognition such as:
+
+```fsharp
+let (|StartsWith|_|) (value: string) = function
+    | (s: string) when s.StartsWith(value) -> Some()
+    | _ -> None
+```
+
+These utilities should be based on primitives rather than structures defined in `Types.fs`.
+
+The only reason it is compiled after `Types.fs` is to allow us to utilise `PluginContext` (which is defined in `Types.fs`) if required.
+
+---
+
+## Spec
+
+```ansi title="File Structure" "Spec.fs"
+Partas.Solid.FablePlugin
+|-- Types.fs
+|-- Utils.fs
+|-- Spec.fs
+|__ Plugin.fs
+```
+
+
