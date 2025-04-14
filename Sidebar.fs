@@ -44,7 +44,7 @@ type PageItem() =
                 class' = "group/mbutton",
                 onClick = fun _ ->
                     if ctx.isMobile() && ctx.openMobile() then ctx.setOpenMobile(false)
-                    ).as'(A(href = href())) {
+                    ).as'(A(href = href(), noScroll = false)) {
                 if unbox props.icon then
                     (unbox<TagValue> props.icon) % {| class' = "size-4" |}
                 Separator(orientation = Orientation.Vertical, class' = "group-hover/mbutton:bg-black/20 in-aria-[current=page]:bg-black transition-colors group-hover/mbutton:in-aria-[current=page]:bg-black")

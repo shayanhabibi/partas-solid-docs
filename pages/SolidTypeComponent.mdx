@@ -21,6 +21,43 @@ SolidTypeComponent attribute allows you to define a component implementation for
 2. The instance identifier must be named `props`
 3. The member must have no arguments or parameters otherwise
 
+## Defining Properties
+
+With Style 1, the value matters little. For primitive types, you could discard the explicit type and just throw some arbitrary value. I think this makes the code more confusing though.
+
+```fsharp title="Style 1"
+[<Erase>] // Erases function compilation in Fable
+member val style1: int = JS.undefined (* | unbox null | [int] *) with get,set
+```
+
+Style 2 allows you to explicitly declare a property as only settable/readable, but is ill suited if you define both (as you would need 2 x Erase attributes).
+
+*Another advantage of style 2 is the ability to declare the members as inline, which allows you to effectively alias properties*
+
+```fsharp title="Style 2"
+member _.style2
+    [<Erase>]
+    with get(): int = 0
+    [<Erase>]
+    and set(value: int) = ()
+
+// inline to alias
+
+member this.styleTwo // Erase is not needed when inlining
+    with inline get() = this.style2
+    and set(value: int) = this.style2 <- value
+```
+
+Style 3 is the shortest, and my favourite, especially if you decide to use a type abbreviation for `DefaultValueAttribute`
+
+```fsharp title="Style 3"
+[<DefaultValue>]
+val mutable style3: int
+
+// ... with `type internal DV = DefaultValueAttribute`
+[<DV>] val mutable style3: int
+```
+
 ## Properties Magics and Gotchas
 
 ```fsharp
