@@ -1,9 +1,11 @@
-﻿namespace Partas.Solid.Docs
+﻿module Partas.Solid.Docs.NavBar
 
+open Partas.Solid.Docs.Types
 open Partas.Solid
 open Partas.Solid.Polymorphism
 open Partas.Solid.Router
 open Partas.Solid.UI
+open Partas.Solid.UI.Context
 open Partas.Solid.Lucide
 open Fable.Core
 open Fable.Core.JsInterop
@@ -15,14 +17,14 @@ type NavBar() =
     inherit VoidNode()
     [<SolidTypeComponentAttribute>]
     member props.constructor =
-        let isMobile = Media.createMediaQuery $"(max-width:{768 - 1}px)"
+        let ctx = useSidebar()
         div(class' = Lib.cn [|
             "flex gap-8 pr-8 items-center justify-between"
             props.class'
         |]).spread(props) {
-            div(class' = if isMobile() then "flex flex-row pl-2 gap-2" else "pl-8" ) {
-                if isMobile() then
-                    SidebarTrigger()
+            div(class' = if Data.Window.isMobile() then "flex flex-row pl-2 gap-2" else "pl-8" ) {
+                if Data.Window.isMobile() then
+                    SidebarTrigger(onClick = fun _ -> if ctx.openMobile() then ctx.setOpenMobile false else ctx.setOpenMobile true)
                 span(class' = "text-2xl font-bold") {
                     AnimatedShinyText() { "Partas" }
                     ".Solid"

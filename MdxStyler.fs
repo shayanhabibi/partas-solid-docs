@@ -1,4 +1,4 @@
-﻿namespace Partas.Solid.Docs
+﻿module Partas.Solid.Docs.MdxStyler
 
 open Fable.Core
 open Fable.Core.JS
@@ -22,7 +22,9 @@ type MdxStyler() =
         MDXProvider(
         ) {
             div(class' = Lib.cn [|
-               "min-w-2/3 pt-12"
+               "ml-auto mr-auto"
+               "pr-8 sm: pr-0"
+               "min-w-2/3"
                "prose"
                "prose-pre:**:data-highlighted-line:bg-indigo-500/20"
                "prose-pre:**:data-highlighted-chars:bg-teal-500/20"
