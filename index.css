@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
 
 /* set default border color due to tailwindcss v4 */
 @layer base {
