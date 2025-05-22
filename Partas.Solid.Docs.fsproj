@@ -26,6 +26,9 @@
         <Content Include="pages\CommonIssues.mdx" />
         <Content Include="pages\Plugin.mdx" />
         <Content Include="pages\Setters.mdx" />
+        <Content Include="pages\Bindings.mdx" />
+        <Content Include="pages\Experimental.mdx" />
+        <Content Include="pages\BuilderInterfaces.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="bindings\internationalised\Program.fs" />

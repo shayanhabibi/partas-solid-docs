@@ -24,6 +24,8 @@ let ForExample () =
 
 # Custom Builders
 
+> Note: Common builders are pre-implemented for you to interface with. See Builder Interfaces
+
 There are cases where you may need to implement your own builder expression for a type component. This can often occur when binding certain libraries.
 
 Let's take an example: Implementing the ArkUI DatePicker:
@@ -102,6 +104,8 @@ The `ctx` argument is now correctly typed as `Accessor<DatePickerApi>`!
 As mentioned previously, it is important to use names for identifiers that are picked up by the Plugin.
 
 When using `[<Import(_, _)>]` on a type that contains the builder expression, the identifiers are eliminated in the AST.
+
+The PARTAS_CONT identifier in the lambdas of the builder Yield expressions has special meaning when being transformed by the plugin. It results in the function being uncurried.
 
 ### PartasImport
 

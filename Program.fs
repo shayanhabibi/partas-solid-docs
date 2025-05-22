@@ -31,12 +31,16 @@ type Pages =
     | CommonIssues
     | Plugin
     | Setters
+    | Bindings
+    | Experimental
+    | BuilderInterfaces
     member this.createNavigationItem icon =
         match this with
         | ContextProviders -> "Context Providers"
         | Overview -> "Usage Overview"
         | SpecialBuilders -> "Custom Builders"
         | CommonIssues -> "Common Issues"
+        | BuilderInterfaces -> "Prebuilt Builder Interfaces"
         | _ -> this.ToString()
         |> NavigationItem.create
             <| this.ToString().ToLowerInvariant()
@@ -72,6 +76,12 @@ type Pages =
             import "default as PluginPage" "./pages/Plugin.mdx"
         | Setters ->
             import "default as SettersPage" "./pages/Setters.mdx"
+        | Bindings ->
+            import "default as BindingsPage" "./pages/Bindings.mdx"
+        | Experimental ->
+            import "default as ExperimentalPage" "./pages/Experimental.mdx"
+        | BuilderInterfaces ->
+            import "default as BuilderInterfacesPage" "./pages/BuilderInterfaces.mdx"
 
 [<SolidComponent>]
 let GithubVisit () =
@@ -131,6 +141,9 @@ let Root () =
         PageRoute Pages.CommonIssues
         PageRoute Pages.Plugin
         PageRoute Pages.Setters
+        PageRoute Pages.Bindings
+        PageRoute Pages.Experimental
+        PageRoute Pages.BuilderInterfaces
     }
 
 Data.Navigation.store.Update [|
@@ -145,7 +158,9 @@ Data.Navigation.store.Update [|
         Pages.ContextProviders.createNavigationItem None
         Pages.Polymorphism.createNavigationItem None
         Pages.SpecialBuilders.createNavigationItem None
+        Pages.BuilderInterfaces.createNavigationItem None
         Pages.Setters.createNavigationItem None
+        Pages.Experimental.createNavigationItem None
     |]
     NavigationGroup.create "Issue Reporting" None [|
         Pages.Debugging.createNavigationItem None
@@ -153,6 +168,7 @@ Data.Navigation.store.Update [|
     |]
     NavigationGroup.create "Dev/Contributing" None [|
         Pages.Plugin.createNavigationItem None
+        Pages.Bindings.createNavigationItem None
     |]
 |]
 render(Root, document.getElementById "root")
