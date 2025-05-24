@@ -112,3 +112,20 @@ The PARTAS_CONT identifier in the lambdas of the builder Yield expressions has s
 To remedy this, there is `[<PartasImport(_, _)>]` which is a reimplementation of the `Import` attribute. It functions the exact same, but our plugin injects the import instead of Fable.
 
 In this manner, we are able to produce an AST that has special identifier names when adding computation expressions to a type which is imported from a library.
+
+## Builder Keywords
+
+[//]: # TO FINISH ()
+Using these keywords in builders will cause transformations when they are read by the plugin. These transforms are usually in the realm of unwrapping lambdas and disposing
+noops, but can also include special pattern matches like transforming curried functions in the case of PARTAS_CONT
+
+- PARTAS_THIS
+- PARTAS_RUNEXPR
+- PARTAS_YIELD
+- PARTAS_ELEMENT
+- PARTAS_TEXT
+- PARTAS_CONT
+- PARTAS_DELAY
+- PARTAS_FIRST
+- PARTAS_SECOND
+- PARTAS_BUILDER

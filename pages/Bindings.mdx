@@ -117,3 +117,28 @@ static member inline someMethod(someparam: 'T, ?someotherparam: 'T, ?someotherot
 
 Essentially, it would be nice to flatten the optional arguments into the signature where possible - and/or appropriate -
 to prevent the user having to build the options object themselves.
+
+## PartasProxyImportAttribute
+
+If you're binding a library that provides composed components via a proxy such as from solid-motion, then you'll want to make use of the
+`PartasProxyImport`. It is much the same as the normal Fable `Import`, except it takes an additional parameter as the key to the proxy
+which is appended to the end of the selector:
+
+```fsharp
+[<Erase; RequireQualifiedAccess>]
+module Motion =
+    [<PartasProxyImport("div","Motion","solid-motion")>]
+    type div() =
+        inherit div()
+        interface MotionProps
+
+// usage
+
+Motion.div() { "Text" }
+```
+
+```jsx title="Compiled output"
+import { Motion } from "solid-motion";
+
+<Motion.div />
+```

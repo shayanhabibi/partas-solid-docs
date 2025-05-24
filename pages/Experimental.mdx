@@ -155,3 +155,15 @@ numberOrString 3. // Will cause an error
 // Depending on your configuration, you may get compiler warnings for op_Implicit usage. This can
 // then be resolved by explicitly using !^, but at least you won't be obstructed from using the function as expected
 ```
+> Be aware that these implicit helpers do not work with arrays/lists without either explicitly typing the value as an accepted array/list type or
+> by using the erase operator `!^`. In other words, the behaviour returns to normal for these cases, requiring explicit casting with !^.
+
+```fsharp
+let numberOrString (value: U2<int, int list>): obj = jsNative
+
+numberOrString 5 // works
+numberOrString [ 5; 6 ] // Error: Expected type U2<int, int list>, but got 'a list
+numberOrString ([5;6] : int list) // works
+numberOrString !^[ 5; 6 ] // works
+numberOrString !^[ "5"; "6" ] // error as expected
+```
