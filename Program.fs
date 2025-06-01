@@ -13,27 +13,22 @@ open Partas.Solid.Docs.NavigationShell
 open Partas.Solid.Docs.Types
 open Partas.Solid.UI
 
-importAll "./index.css"
 
 [<RequireQualifiedAccess>]
 type Pages =
-    | Introduction
-    | Installation
-    | Compiling
-    | Motivation
-    | Overview
-    | SolidTypeComponent
-    | Spread
-    | ContextProviders
-    | Polymorphism
-    | SpecialBuilders
-    | Debugging
-    | CommonIssues
-    | Plugin
-    | Setters
-    | Bindings
-    | Experimental
-    | BuilderInterfaces
+    | Introduction | Installation
+    | Compiling | Motivation
+    | Overview | SolidTypeComponent
+    | Spread | ContextProviders
+    | Polymorphism | SpecialBuilders
+    | Debugging | CommonIssues
+    | Plugin | Setters | Bindings
+    | Experimental | BuilderInterfaces
+    | Components | Terminology
+    | ModularForms | Motion
+    | Kobalte | Lucide | Cmdk
+    | ApexCharts | TanStackTable
+    | Primitives | NeoDrag
     member this.createNavigationItem icon =
         match this with
         | ContextProviders -> "Context Providers"
@@ -82,6 +77,28 @@ type Pages =
             import "default as ExperimentalPage" "./pages/Experimental.mdx"
         | BuilderInterfaces ->
             import "default as BuilderInterfacesPage" "./pages/BuilderInterfaces.mdx"
+        | Components ->
+            import "default as ComponentPage" "./pages/Components.mdx"
+        | Terminology ->
+            import "default as TerminologyPage" "./pages/Terminology.mdx"
+        | ModularForms ->
+            import "default as ModularFormsPage" "./pages/ModularForms.mdx"
+        | Motion ->
+            import "default as MotionPage" "./pages/Motion.mdx"
+        | Kobalte ->
+            import "default as KobaltePage" "./pages/Kobalte.mdx"
+        | Lucide ->
+            import "default as LucidePage" "./pages/Lucide.mdx"
+        | Cmdk ->
+            import "default as CmdkPage" "./pages/Cmdk.mdx"
+        | ApexCharts ->
+            import "default as ApexChartsPage" "./pages/ApexCharts.mdx"
+        | TanStackTable ->
+            import "default as TanStackTablePage" "./pages/TanStackTable.mdx"
+        | Primitives ->
+            import "default as PrimitivesPage" "./pages/Primitives.mdx"
+        | NeoDrag ->
+            import "default as NeoDragPage" "./pages/NeoDrag.mdx"
 
 [<SolidComponent>]
 let GithubVisit () =
@@ -89,9 +106,11 @@ let GithubVisit () =
         SidebarMenu() {
             SidebarMenuItem(class' = "flex gap-2 items-center") {
                 Motion(
-                    hover = jsOptions<MotionStyle>(fun o -> o.scale <- unbox 1.10)
+                    hover = [
+                        MotionStyle.scale 1.1
+                    ]
                 )  {
-                    Button(variant = button.variant.ghost, size = button.size.icon) {
+                    Button(variant = Button.Variant.Ghost, size = Button.Size.Icon) {
                         Lucide.Github()
                     }
                 }
@@ -105,7 +124,7 @@ let GithubVisit () =
 
 [<Erase>]
 type RootApp() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.__ =
         SidebarProvider().style'({| ``--navbar-size`` = NavigationBar.size |}) {
@@ -144,6 +163,17 @@ let Root () =
         PageRoute Pages.Bindings
         PageRoute Pages.Experimental
         PageRoute Pages.BuilderInterfaces
+        PageRoute Pages.Components
+        PageRoute Pages.Terminology
+        PageRoute Pages.ModularForms
+        PageRoute Pages.Motion
+        PageRoute Pages.Kobalte
+        PageRoute Pages.Lucide
+        PageRoute Pages.Cmdk
+        PageRoute Pages.ApexCharts
+        PageRoute Pages.TanStackTable
+        PageRoute Pages.Primitives
+        PageRoute Pages.NeoDrag
     }
 
 Data.Navigation.store.Update [|
@@ -161,6 +191,7 @@ Data.Navigation.store.Update [|
         Pages.BuilderInterfaces.createNavigationItem None
         Pages.Setters.createNavigationItem None
         Pages.Experimental.createNavigationItem None
+        Pages.Components.createNavigationItem None
     |]
     NavigationGroup.create "Issue Reporting" None [|
         Pages.Debugging.createNavigationItem None
@@ -170,5 +201,16 @@ Data.Navigation.store.Update [|
         Pages.Plugin.createNavigationItem None
         Pages.Bindings.createNavigationItem None
     |]
+    NavigationGroup.create "Bindings" None [|
+        Pages.ApexCharts.createNavigationItem None
+        Pages.Cmdk.createNavigationItem None
+        Pages.Kobalte.createNavigationItem None
+        Pages.Lucide.createNavigationItem None
+        Pages.ModularForms.createNavigationItem None
+        Pages.Primitives.createNavigationItem None
+        Pages.NeoDrag.createNavigationItem None
+        Pages.TanStackTable.createNavigationItem None
+        Pages.Motion.createNavigationItem None
+    |]
 |]
-render(Root, document.getElementById "root")
+

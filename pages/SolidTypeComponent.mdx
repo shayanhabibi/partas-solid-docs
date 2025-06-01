@@ -1,3 +1,11 @@
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # SolidTypeComponent
 
 ```fsharp "Partas.Solid" "props"
@@ -7,7 +15,7 @@ open Fable.Core
 
 [<Erase>]
 type CustomTag() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>] member val customAttribute: string = JS.undefined with get,set
     [<SolidTypeComponent>]
     member props.constructor =
@@ -121,7 +129,7 @@ open Fable.Core
 
 [<Import("SomeComponent", "SomeLibrary")>]
 type MyComponent() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>]
     member val ``my-attribute``: string = JS.undefined with get,set
     member this.myAttribute

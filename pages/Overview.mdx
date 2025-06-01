@@ -1,6 +1,14 @@
 import { AnimatedShinyText } from "../output/ui/text/AnimatedShinyText.fs.jsx";
 import { ButtonExample } from "../output/examples/OverviewPage.fs.jsx";
 
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Overview
 
 Solid-js operates under the modus operandi of *everything is a function*.
@@ -59,7 +67,7 @@ open Partas.Solid
 
 [<Erase>]
 type MyComponent() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>] member val myAttribute: bool = false with get,set
 ```
 
@@ -78,7 +86,7 @@ open Fable.Core
 
 [<Erase>]
 type MyComponent() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>] member val myAttribute: bool = JS.undefined with get,set
     [<SolidTypeComponent>]
     member props.constructor =

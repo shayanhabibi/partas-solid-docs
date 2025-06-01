@@ -25,7 +25,7 @@ open Fable.Core
 /// </summary>
 [<Erase>]
 type BorderBeam() =
-    inherit VoidNode()
+    interface VoidNode
     [<Erase>] member val anchor: int = unbox null with get,set
     [<Erase>] member val borderWidth: float = unbox null with get,set
     [<Erase>] member val colorFrom: string = unbox null with get,set
@@ -43,16 +43,15 @@ type BorderBeam() =
         props.duration <- 15
         props.size <- 200
         
-        let style = {|
-                ``--size`` = $"{props.size}px"
-                ``--duration`` = $"{props.duration}s"
-                ``--anchor`` = $"{props.anchor}%%"
-                ``--border-widt`` = $"{props.borderWidth}px"
-                ``--color-from`` = props.colorFrom
-                ``--color-to`` = props.colorTo
-                ``--delay`` = $"-{props.delay}s"
-        |}
-        
+        let style = JsInterop.createObj [
+                "--size", $"{props.size}px"
+                "--duration", $"{props.duration}s"
+                "--anchor", $"{props.anchor}%%"
+                "--border-width", $"{props.borderWidth}px"
+                "--color-from", props.colorFrom
+                "--color-to", props.colorTo
+                "--delay", $"-{props.delay}s"
+        ]
         div(
             class' = Lib.cn [|
                 "pointer-events-none absolute inset-0 rounded-[inherit] [border:var(--border-width)_solid_transparent]"                

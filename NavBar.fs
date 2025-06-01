@@ -11,10 +11,11 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Core.JS
 open Partas.Solid.Primitives
+open Partas.Solid.UI.Sidebar.Context
 
 [<Erase>]
 type NavBar() =
-    inherit VoidNode()
+    interface VoidNode
     [<SolidTypeComponentAttribute>]
     member props.constructor =
         let ctx = useSidebar()
@@ -25,7 +26,7 @@ type NavBar() =
             div(class' = if Data.Window.isMobile() then "flex flex-row pl-2 gap-2" else "pl-8" ) {
                 if Data.Window.isMobile() then
                     SidebarTrigger(onClick = fun _ -> if ctx.openMobile() then ctx.setOpenMobile false else ctx.setOpenMobile true)
-                span(class' = "text-2xl font-bold") {
+                span(class' = "flex text-2xl font-bold") {
                     AnimatedShinyText() { "Partas" }
                     ".Solid"
                 }
@@ -39,11 +40,11 @@ type NavBar() =
                             rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent
                             hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground
                             focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50
-                            data-[expanded]:bg-accent/50",
+                            data-[expanded]:bg-accent/50 bg-sidebar",
                         href = "https://github.com/shayanhabibi/Partas.Solid"
                     ) { "Source" }
                     NavigationMenuItem() {
-                        NavigationMenuTrigger() {
+                        NavigationMenuTrigger(class' = "bg-sidebar") {
                             "Ecosystem" ; NavigationMenuIcon()
                         }
                         NavigationMenuContent(

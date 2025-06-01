@@ -1,7 +1,7 @@
 ﻿module Partas.Solid.Docs.Types
 
 open Partas.Solid
-open Partas.Solid.Primitives
+open Partas.Solid.Primitives.Media
 open Fable.Core
 
 [<Erase; AutoOpen>]
@@ -45,4 +45,4 @@ module Data =
         let data, store = createStore<NavigationGroup[]>([||])
     [<Erase>]
     module Window =
-        let isMobile = Media.createMediaQuery $"(max-width:{1023}px)"
+        let isMobile = createMediaQuery $"(max-width:{1023}px)"

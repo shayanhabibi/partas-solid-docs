@@ -4,20 +4,9 @@ open Partas.Solid
 open Fable.Core
 
 [<Erase>]
-module callout =
-    let variants = 
-        Lib.cva
-            "rounded-md border-l-4 p-2 pl-4"
-                {| variants =
-                    {| variant =
-                        {| ``default`` = "border-info-foreground bg-info text-info-foreground"
-                           success = "border-success-foreground bg-success text-success-foreground"
-                           warning = "border-warning-foreground bg-warning text-warning-foreground"
-                           error = "border-error-foreground bg-error text-error-foreground" |} |}
-                   defaultVariants = {| variant = "default" |} |}
-    
-    [<StringEnum>]
-    type variant =
+module Callout =
+    [<StringEnum; RequireQualifiedAccess>]
+    type Variant =
         | Default
         | Success
         | Warning
@@ -26,14 +15,22 @@ module callout =
 [<Erase>]
 type Callout() =
     inherit div()
+    static member variants(?variant: Callout.Variant): string =
+        let variant = defaultArg variant Callout.Variant.Default
+        "rounded-md border-l-4 p-2 pl-4 " +
+        match variant with
+        | Callout.Variant.Default -> "border-info-foreground bg-info text-info-foreground"
+        | Callout.Variant.Success -> "border-success-foreground bg-success text-success-foreground"
+        | Callout.Variant.Warning -> "border-warning-foreground bg-warning text-warning-foreground"
+        | Callout.Variant.Error -> "border-error-foreground bg-error text-error-foreground"
     [<Erase>]
-    member val variant: callout.variant = unbox null with get,set
+    member val variant: Callout.Variant = unbox null with get,set
     
     [<SolidTypeComponent>]
     member props.callout =
         div(
             class' = Lib.cn [|
-                callout.variants({| variant = props.variant |})
+                Callout.variants(props.variant)
                 props.class'
             |]
             ).spread props

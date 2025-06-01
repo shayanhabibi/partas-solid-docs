@@ -2,12 +2,13 @@
 
 open System
 open Partas.Solid
+open Partas.Solid.Style
 open Partas.Solid.Aria
 open Fable.Core
 
 [<Erase>]
 type private TimelineItemBullet() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>]
     member val isActive: bool = unbox null with get,set
     [<Erase>]
@@ -25,16 +26,16 @@ type private TimelineItemBullet() =
                 props.class'
             |],
             ariaHidden = true
-        )   .style'(
-            {| width = $"{bulletSize()}px"
-               height = $"{bulletSize()}px"
-               left = $"{-bulletSize() / 2 - lineSize() / 2}px"
-               ``border-width`` = $"{lineSize()}px" |} )
-            .spread props
+        )   .style'([
+            Style.width $"{bulletSize()}px"
+            Style.height $"{bulletSize()}px"
+            Style.left $"{-bulletSize() / 2 - lineSize() / 2}px"
+            "border-width", $"{lineSize()}px"
+        ])  .spread props
 
 [<Erase>]
 type private TimelineItemTitle() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponentAttribute>]
     member props.constructor =
         div(class' = "mb-1 text-base font-semibold leading-none") { props.children }
@@ -50,7 +51,7 @@ type private TimelineItemDescription() =
 
 [<Erase>]
 type private TimelineItem() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>]
     member val title: HtmlElement = unbox null with get,set
     [<Erase>]
@@ -76,11 +77,7 @@ type private TimelineItem() =
                           props.isLast &&= "border-l-transparent pb-0"
                           props.isActive &&= not(props.isLast) &&= "border-l-primary"
                           props.class' |]
-            ).style'(
-                {|
-                    ``border-left-width`` = $"{lineSize}px"  
-                |}
-            ).spread props
+            ).style'([Style.borderLeftWidth $"{lineSize}px"]).spread props
             {
                 TimelineItemBullet(
                         lineSize = props.lineSize,
@@ -115,7 +112,7 @@ module Timeline =
 
 [<Erase>]
 type Timeline() =
-    inherit VoidNode()
+    interface VoidNode
     [<Erase>]
     member val activeItem: int = unbox null with get,set
     [<Erase>]
@@ -137,7 +134,7 @@ type Timeline() =
                 |> _.Length
             length - 1
             |> (=) (index())
-        ul().style'({| ``padding-left`` = Timeline.calcPadding props.bulletSize |})
+        ul().style'([Style.paddingLeft (Timeline.calcPadding props.bulletSize)])
             {
             For(each = props.items) {
                 yield fun item index ->

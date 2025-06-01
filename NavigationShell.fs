@@ -18,7 +18,7 @@ open Partas.Solid.Lucide
 
 [<Erase>]
 type NavigationBar() =
-    inherit RegularNode()
+    interface RegularNode
     static member inline size: string = $"calc(var(--spacing)*{12}"
     [<DefaultValue>] val mutable items: NavigationItem[]
     [<SolidTypeComponent>]
@@ -36,7 +36,7 @@ type NavigationBar() =
 
 [<Erase>]
 type NavigationShell() =
-    inherit RegularNode()
+    interface RegularNode
     [<DefaultValue>] val mutable header: HtmlElement
     [<DefaultValue>] val mutable sidebar: HtmlElement
     [<SolidTypeComponent>]
@@ -58,10 +58,10 @@ type NavigationShell() =
 
 [<Erase>]
 type NavSidebarContent() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.__ =
-        let ctx = useSidebar()
+        let ctx = Context.useSidebar()
         For(each = Data.Navigation.data) { yield fun group index ->
             SidebarGroup() {
                 SidebarGroupLabel() {
@@ -100,12 +100,12 @@ open Partas.Solid.Experimental
 
 [<Erase>]
 type SidebarShell() =
-    inherit RegularNode()
+    interface RegularNode
     [<DefaultValue>] val mutable header: HtmlElement
     [<DefaultValue>] val mutable footer: HtmlElement
     [<SolidTypeComponent>]
     member props.__ =
-        let ctx = useSidebar()
+        let ctx = Context.useSidebar()
         
         let collapsible = fun () -> if Data.Window.isMobile() then sidebar.Collapsible.OffCanvas else sidebar.Collapsible.None
         
@@ -129,7 +129,7 @@ type SidebarShell() =
         
 [<Erase>]
 type MainViewPort() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.__ =
         Fragment() {

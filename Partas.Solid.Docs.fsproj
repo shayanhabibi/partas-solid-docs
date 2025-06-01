@@ -10,6 +10,9 @@
         <Content Include="index.css" />
         <Content Include="vite.config.mts" />
         <Content Include="index.html" />
+        <Content Remove="..\..\.nuget\packages\partas.solid.tanstack.table\0.2.0\contentFiles\any\net9.0\README.md" />
+        <Content Remove="..\..\.nuget\packages\partas.solid.neodrag\0.2.0\contentFiles\any\net9.0\README.md" />
+        <Content Remove="..\..\.nuget\packages\partas.solid.motion\0.2.0\contentFiles\any\net9.0\README.md" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="pages\Introduction.mdx" />
@@ -29,44 +32,17 @@
         <Content Include="pages\Bindings.mdx" />
         <Content Include="pages\Experimental.mdx" />
         <Content Include="pages\BuilderInterfaces.mdx" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="bindings\internationalised\Program.fs" />
-        <Compile Include="bindings\zagjs\Popper.fs" />
-        <Compile Include="bindings\zagjs\DatePicker.fs" />
-        <Compile Include="bindings\lucide\Lucide.fs" />
-        <Compile Include="bindings\lucide\LucideLab.fs" />
-        <Compile Include="bindings\libdom\LibDom.fs" />
-        <Compile Include="bindings\libdom\CSSStyleDeclaration.fs" />
-        <Compile Include="bindings\libdom\Types.fs" />
-        <Compile Include="bindings\libdom\Utils.fs" />
-        <Compile Include="bindings\motion\Types.fs" />
-        <Compile Include="bindings\motion\Program.fs" />
-        <Compile Include="bindings\primitives\Primitives.fs" />
-        <Compile Include="bindings\sonner\Program.fs" />
-        <Compile Include="bindings\tanstack\Program.fs" />
-        <Compile Include="bindings\tanstack\Table.fs" />
-        <Compile Include="bindings\tanstack\ColumnFiltering.fs" />
-        <Compile Include="bindings\tanstack\ColumnFaceting.fs" />
-        <Compile Include="bindings\tanstack\ColumnOrdering.fs" />
-        <Compile Include="bindings\tanstack\ColumnPinning.fs" />
-        <Compile Include="bindings\tanstack\ColumnSizing.fs" />
-        <Compile Include="bindings\tanstack\ColumnVisibility.fs" />
-        <Compile Include="bindings\tanstack\GlobalFaceting.fs" />
-        <Compile Include="bindings\tanstack\GlobalFiltering.fs" />
-        <Compile Include="bindings\tanstack\Sorting.fs" />
-        <Compile Include="bindings\tanstack\Grouping.fs" />
-        <Compile Include="bindings\tanstack\Expanding.fs" />
-        <Compile Include="bindings\tanstack\Pagination.fs" />
-        <Compile Include="bindings\tanstack\RowPinning.fs" />
-        <Compile Include="bindings\tanstack\RowSelection.fs" />
-        <Compile Include="bindings\kobalte\Program.fs" />
-        <Compile Include="bindings\corvu\Program.fs" />
-        <Compile Include="bindings\cmdk\Program.fs" />
-        <Compile Include="bindings\arkui\ContextBindings.fs" />
-        <Compile Include="bindings\arkui\Program.fs" />
-        <Compile Include="bindings\apexcharts\Program.fs" />
-        <Compile Include="bindings\apexcharts\Solid.fs" />
+        <Content Include="pages\Components.mdx" />
+        <Content Include="pages\Terminology.mdx" />
+        <Content Include="pages\ModularForms.mdx" />
+        <Content Include="pages\Motion.mdx" />
+        <Content Include="pages\Kobalte.mdx" />
+        <Content Include="pages\Lucide.mdx" />
+        <Content Include="pages\Cmdk.mdx" />
+        <Content Include="pages\ApexCharts.mdx" />
+        <Content Include="pages\TanStackTable.mdx" />
+        <Content Include="pages\Primitives.mdx" />
+        <Content Include="pages\NeoDrag.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ui\Utils.fs" />
@@ -118,19 +94,24 @@
         <Compile Include="ui\components\BarList.fs" />
         <Compile Include="ui\components\DeltaBar.fs" />
         <Compile Include="ui\components\Progress.fs" />
-        <Compile Include="ui\text\AnimatedShinyText.fs" />
-        <Compile Include="ui\text\WordRotate.fs" />
-        <Compile Include="ui\text\WordPullup.fs" />
-        <Compile Include="ui\text\FlipText.fs" />
-        <Compile Include="ui\text\GradualSpacing.fs" />
-        <Compile Include="ui\text\LetterPullup.fs" />
-        <Compile Include="ui\text\SparklesText.fs" />
-        <Compile Include="ui\text\WordFadeIn.fs" />
+        <Compile Include="ui\components\Visualisations\BarList.fs" />
+        <Compile Include="ui\components\Visualisations\DeltaBar.fs" />
+        <Compile Include="ui\components\Visualisations\Progress.fs" />
         <Compile Include="ui\layouts\Flex.fs" />
         <Compile Include="ui\layouts\Grid.fs" />
         <Compile Include="ui\layouts\Marquee.fs" />
         <Compile Include="ui\effects\BorderBeam.fs" />
         <Compile Include="ui\effects\DotPattern.fs" />
+        <Compile Include="ui\effects\AnimatedBeam.fs" />
+        <Compile Include="ui\effects\ShineBorder.fs" />
+        <Compile Include="ui\TextEffects\WordRotate.fs" />
+        <Compile Include="ui\TextEffects\WordPullup.fs" />
+        <Compile Include="ui\TextEffects\WordFadeIn.fs" />
+        <Compile Include="ui\TextEffects\SparklesText.fs" />
+        <Compile Include="ui\TextEffects\LetterPullup.fs" />
+        <Compile Include="ui\TextEffects\GradualSpacing.fs" />
+        <Compile Include="ui\TextEffects\FlipText.fs" />
+        <Compile Include="ui\TextEffects\AnimatedShinyText.fs" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="examples\MotivationPage.fs" />
@@ -144,12 +125,27 @@
         <Compile Include="Program.fs" />
         <Compile Include="links\Component.fs" />
         <Compile Include="links\Index.fs" />
+        <Compile Include="links\Terminology.fs" />
         <Content Include="README.md" />
+        <Compile Include="Render.fs" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Fable.AST" Version="5.0.0-beta.1" />
+      <PackageReference Include="Fable.Browser.ResizeObserver" Version="1.0.0" />
       <PackageReference Include="Fable.Core" Version="4.5.0" />
-      <PackageReference Include="Partas.Solid" Version="0.2.32" />
+      <PackageReference Include="Partas.Solid" Version="1.0.0-alpha98" />
+      <PackageReference Include="Partas.Solid.ApexCharts" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.ArkUI" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Cmdk" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Corvu" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Kobalte" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Lucide" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.ModularForms" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Motion" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.NeoDrag" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Primitives.Media" Version="0.1.1" />
+      <PackageReference Include="Partas.Solid.Sonner" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.TanStack.Table" Version="0.2.0" />
     </ItemGroup>
 
 </Project>

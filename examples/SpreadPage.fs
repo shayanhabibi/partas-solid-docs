@@ -5,7 +5,7 @@ open Partas.Solid
 
 [<Erase>]
 type MyCenteredButton() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = "flex w-full justify-center") {
@@ -13,7 +13,7 @@ type MyCenteredButton() =
         }
 [<Erase>]
 type MyCenteredButtonTwo() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = "flex w-full justify-center") {
@@ -22,7 +22,7 @@ type MyCenteredButtonTwo() =
         }
 [<Erase>]
 type MyCenteredButtonThree() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = "flex w-full justify-center") {

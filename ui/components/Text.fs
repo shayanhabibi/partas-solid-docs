@@ -1,5 +1,6 @@
 ﻿namespace Partas.Solid.UI
 
+open Browser.Types
 open Partas.Solid
 open Partas.Solid.Kobalte
 open Fable.Core
@@ -64,7 +65,13 @@ type TextFieldInput() =
     member props.constructor =
         props.type' <- textFieldInput.Text
         TextField.Input(class' = Lib.cn [|
-            "flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[invalid]:border-error-foreground data-[invalid]:text-error-foreground"
+            "flex h-10 w-full rounded-md border border-input
+            bg-transparent px-3 py-2 text-sm ring-offset-background
+            file:border-0 file:bg-transparent file:text-sm file:font-medium
+            placeholder:text-muted-foreground focus-visible:outline-none
+            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+            disabled:cursor-not-allowed disabled:opacity-50
+            data-[invalid]:border-error-foreground data-[invalid]:text-error-foreground"
             props.class'
         |], type' = unbox<string> props.type').spread props
 
@@ -74,7 +81,11 @@ type TextFieldTextArea() =
     [<SolidTypeComponentAttribute>]
     member props.constructor =
         TextField.TextArea(class' = Lib.cn [|
-            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            "flex min-h-[80px] w-full rounded-md border border-input
+            bg-background px-3 py-2 text-sm ring-offset-background
+            placeholder:text-muted-foreground focus-visible:outline-none
+            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+            disabled:cursor-not-allowed disabled:opacity-50"
             props.class'
         |]).spread props
 
@@ -105,3 +116,66 @@ type TextFieldErrorMessage() =
     member props.constructor =
         TextField.ErrorMessage(class' = Lib.cn [| label.variants({| variant = "error" |}); props.class' |])
             .spread props
+
+[<AutoOpen; Erase>]
+module TextFieldModularForms =
+    [<Erase; RequireQualifiedAccess>]
+    module ModularForms =
+        type private DV = DefaultValueAttribute
+        
+        [<RequireQualifiedAccess; StringEnum>]
+        type TextFieldType =
+            | Text
+            | Email
+            | Tel
+            | Password
+            | Url
+            | Date
+
+        open Fable.Core.JsInterop
+        
+        [<Erase>]
+        type TextFieldForm() =
+            inherit TextField()
+            [<DV>] val mutable type': TextFieldType
+            [<DV>] val mutable private ref: Element
+            [<DV>] val mutable label: string
+            [<DV>] val mutable placeholder: string
+            [<DV>] val mutable error: string
+            [<DV>] val mutable multiline: bool
+            [<DV>] val mutable onInput: (InputEvent -> unit)
+            [<DV>] val mutable onBlur: (FocusEvent -> unit)
+            [<SolidTypeComponent>]
+            member props.constructor =
+                TextField(
+                    name = props.name,
+                    class' = props.class'
+                    ,value = props.value
+                    ,required = props.required
+                    ,disabled = props.disabled
+                    ,validationState = if unbox<bool> props.error then ValidationState.Invalid else ValidationState.Valid
+                    ) {
+                    Show(when' = unbox props.label) {
+                        TextFieldLabel() { props.label }
+                    }
+                    Show(
+                        when' = props.multiline
+                        ,fallback= TextFieldInput(
+                                placeholder = props.placeholder
+                                ,value = props.value
+                                ,onInput = props.onInput
+                                ,onChange = !!props.onChange
+                                ,onBlur = !!props.onBlur
+                            ).ref(props.ref)
+                        ) {
+                        TextFieldTextArea(
+                                placeholder = props.placeholder
+                                ,onInput = props.onInput
+                                ,onChange = !!props.onChange
+                                ,onBlur = !!props.onBlur
+                            ).ref(props.ref).bool("autoResize", true)
+                    }
+                    TextFieldErrorMessage() { props.error }
+                }
+            
+            

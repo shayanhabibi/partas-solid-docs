@@ -92,17 +92,18 @@ type ProgressCircle() =
                         r = !!normalizedRadius(),
                         cx = !^radius(),
                         cy = !^radius(),
+                        strokeWidth = strokeWidth(),
+                        fill = "transparent",
+                        stroke = "",
+                        strokeLinecap = !!Style.Types.StrokeLinecap.Round,
+                        strokeDasharray = $"{circumference()} {circumference()}",
+                        strokeDashoffset = $"{offset()}",
                         class' = Lib.cn [|
                             "stroke-primary transition-colors ease-linear"
                             if props.showAnimation then "transition-all duration-300 ease-in-out"
                             else ""
                         |]
-                    )   .attr("stroke-width", !!strokeWidth())
-                        .attr("fill", "transparent")
-                        .attr("stroke", "")
-                        .attr("stroke-linecap", !!Svg.StrokeLinecap.Round)
-                        .attr("stroke-dasharray", $"{circumference()} {circumference()}")
-                        .attr("stroke-dashoffset", $"{offset()}")
+                    )
                 else null
             }
             div(class' = "absolute flex") { props.children }

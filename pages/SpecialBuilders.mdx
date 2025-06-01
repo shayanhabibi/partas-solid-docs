@@ -1,5 +1,13 @@
 import { ForExample } from "../output/examples/SpecialBuildersPage.fs.jsx";
 
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Special Builder Expressions
 
 There are a couple special builder computation expressions to take note of. These builder expressions follow the Solid-JS reference, but are documented due to F# quirks.
@@ -37,7 +45,7 @@ open Fable.Core
 
 [<Import("DatePicker.Context","IMPORT_MODULE")>]
 type DatePickerContext() =
-    inherit RegularNode()
+    interface RegularNode
 ```
 
 The ArkUI DatePickerContext element takes an anonymous function as a child which has one argument, the context object.
@@ -84,7 +92,7 @@ Returning to our example with the DatePicker tag, we can now interface with our 
 type DatePickerApi = Glutinum.ZagJs.DatePickerApi
 [<Import("DatePicker.Context", datePicker)>]
 type DatePickerContext() =
-    inherit RegularNode()
+    interface RegularNode
     interface ArkUIContext<DatePickerApi>
 ```
 

@@ -1,5 +1,13 @@
 import { SpreadExampleOne, SpreadExampleTwo, SpreadExampleThree, SpreadExampleZero } from "../output/examples/SpreadPage.fs.jsx";
 
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Object Spreading
 
 ```fsharp title="Spreading Objects"
@@ -30,7 +38,7 @@ open Partas.Solid
 
 [<Erase>]
 type MyCenteredButton() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = "flex justify-center w-full") {
@@ -58,7 +66,7 @@ open Partas.Solid
 
 [<Erase>]
 type MyCenteredButtonTwo() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
     div(class' = "flex justify-center w-full") {
@@ -81,7 +89,7 @@ In cases like this, if you want to pass these split properties with the spread, 
 ```fsharp
 [<Erase>]
 type MyCenteredButtonThree() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = "flex w-full justify-center") {

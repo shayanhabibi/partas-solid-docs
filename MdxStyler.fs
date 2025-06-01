@@ -7,7 +7,7 @@ open Partas.Solid.UI
 
 [<Import("MDXProvider", "solid-jsx")>]
 type MDXProvider() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>] member val components = undefined with get,set
 
 type [<Erase>] Export =
@@ -16,7 +16,7 @@ type [<Erase>] Export =
 
 [<Erase>]
 type MdxStyler() =
-    inherit RegularNode()
+    interface RegularNode
     [<SolidTypeComponentAttribute>]
     member props.constructor =
         MDXProvider(

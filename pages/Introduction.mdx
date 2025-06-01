@@ -1,5 +1,13 @@
 import { PartasSolidLink, OxpeckerSolidLink, FableLink } from "../output/links/Index.fs.jsx"
 
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Introduction
 
 <PartasSolidLink>Partas.Solid</PartasSolidLink> is a plugin for <FableLink>Fable</FableLink>, a F# to JS
@@ -37,7 +45,7 @@ But it is not possible to then use components in the same DSL. Your components a
 
 You can interop with JS libraries, but the process can be laborious since you have to use various interop functions like mkProperty or createElement.
 
-### Oxpecker Style - A giant leap
+### Oxpecker Style - Computation Expressions
 
 ```fsharp title="Oxpecker DSL"
 [<SolidComponent>]
@@ -49,7 +57,19 @@ let MyComponent () =
     }
 ```
 
-<OxpeckerSolidLink>Oxpecker</OxpeckerSolidLink> provides a DSL that is significantly superior in my view, as it more closely resembles JSX/Html, and provides better readability when distinguishing between attributes and children etc.
+<OxpeckerSolidLink>Oxpecker</OxpeckerSolidLink> provides a DSL that has several advantages in my view:
+
+1. An error does not propagate into the whole list declaration resulting in brackets of red
+2. Distinguishing between children and properties is more intuitive
+3. Resembles JSX more closely
+4. Makes interop less verbose
+5. Subjectively less verbose
+
+But it does come with its own costs associated with:
+1. Constructor parameters suggestion/completion for extension setters is lacking (specifically in Rider, this is a known issue that hopefully is corrected in the future)
+2. Computation Expressions can potentially burden analysers and slow down compilation in monoliths (but this is yet to be measured)
+
+#### Interop with Oxpecker style
 
 You can define new tags to interop with libraries:
 
@@ -59,7 +79,7 @@ open Partas.Solid
 open Fable.Core
 [<Import("SomeComponent", "SomeLibrary")>]
 type SomeComponent() =
-    inherit RegularNode()
+    interface RegularNode
     [<Erase>] member val someAttribute: string = JS.undefined with get,set
 ```
 
@@ -67,7 +87,7 @@ Unfortunately, Oxpecker.Solid does not provide the functionality to fulfill the 
 
 This is because Oxpecker.Solid has a divergent opinionated goal, which is to provide a clean, performant, and minimally intrusive plugin transformation to interop with Solid-js.
 
-### Partas.Solid - Taking a run-up before the leap
+### Partas.Solid
 
 ```fsharp title="Partas expanded Oxpecker DSL"
 type CenteredButton() =
@@ -87,17 +107,12 @@ While this fork moves towards its own opinionated goal, most (if not all) functi
 
 The larger breadth that Partas.Solid takes leads to more laborious and cumbersome requirements and development of the plugin API surface. But the end result is a more expansive and flexible developer experience.
 
-#### Supporting Development
+# Why choose Partas.Solid
 
-Every effort is taken to provide explanatory documentation in the plugin, with a suite of expanding tests which convey the promises of the plugin goal.
+Besides Solid-js being the most performant front end framework?
 
-The plugin will have continual support, and will benefit from:
-1. Issues - identifying edge cases/issues will make the plugin more robust as they are fixed
-2. Stars - because we all like validation, and it helps with (1)
-3. Documentation - because we want the plugin to be easy to grok
-4. Tests - because this makes the plugin more robust
+My goal is to make the most expressive and easy to use framework to produce your front end.
 
-And obviously any financial support goes a long way to providing me food.
+I am actively and extensively developing the plugin to be compatible with a wide variety of libraries, with usage being as native as possible.
 
-
-
+You can rest assured that I will support you in your development process to the best of my ability.

@@ -8,7 +8,7 @@ open Fable.Core.JS
 
 [<Erase>]
 type LinkCard() =
-    inherit RegularNode()
+    interface RegularNode
     // [<Erase>] member val link: string = undefined with get,set
     [<Erase>] member val href: string = undefined with get,set
     [<Erase>] member val avatar: string = undefined with get,set

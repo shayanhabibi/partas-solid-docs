@@ -1,3 +1,11 @@
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Polymorphism
 
 There are libraries such as Kobalte and ArkUI which allow polymorphism. This is where the properties of the parent are passed to the specified component or tag.
@@ -22,7 +30,7 @@ open Partas.Solid.Polymorphism // open supporting module
 
 [<Erase>]
 type PolymorphicComponent() =
-    inherit RegularNode()
+    interface RegularNode
     interface Polymorph // interface specified type
     // ...
 ```
@@ -34,7 +42,7 @@ The polymorphic attribute `as` is supported by default in the plugin (to interop
 ```fsharp title="Polymorphism by tag value"
 [<Erase>]
 type PolymorphicComponent() =
-    inherit RegularNode()
+    interface RegularNode
     interface Polymorph // interface specified type
     [<Erase>]
     member val as': TagValue = JS.undefined with get,set
@@ -48,7 +56,7 @@ The reason for this is that polymorphism will often result in you utilising the 
 ```fsharp title="Dual polymorphism support"
 [<Erase>]
 type PolymorphicComponent() =
-    inherit RegularNode()
+    interface RegularNode
     interface Polymorph // interface specified type
     [<Erase>]
     member val as': TagValue = JS.undefined with get,set
@@ -76,7 +84,7 @@ In the case where you need an attribute to support the above type of *property r
 ```fsharp title="Custom Polymorphic attributes" "__PARTAS_POLYMORPHIC__"
 [<Erase>]
 type PolymorphicComponent() =
-    inherit RegularNode()
+    interface RegularNode
     interface Polymorph // interface specified type
     [<Erase>]
     member val ``__PARTAS_POLYMORPHIC__asChild``: HtmlElement = JS.undefined with get,set

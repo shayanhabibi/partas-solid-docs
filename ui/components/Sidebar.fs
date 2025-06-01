@@ -4,7 +4,7 @@ open Partas.Solid.Polymorphism
 open Browser
 open Fable.Core.JS
 open Partas.Solid
-open Partas.Solid.Primitives
+open Partas.Solid.Primitives.Media
 open Partas.Solid.Aria
 open Fable.Core
 open Browser.Types
@@ -55,17 +55,27 @@ module sidebar =
 open sidebar
 open Fable.Core.JsInterop
 
-[<Erase>]
-module Context =
-    let SidebarContext = createContext<SidebarContext>()
-    let useSidebar () =
-        let context = useContext(SidebarContext)
-        if not (unbox context) then failwith "useSidebar can only be used within a Sidebar"
-        else context
-        
-    let useIsMobile (fallback: bool) =
-        let isMobile = Media.createMediaQuery $"(max-width:{768 - 1}px)"
-        isMobile
+[<AutoOpen; Erase>]
+module Sidebar =
+    [<Erase>]
+    module Context =
+        let SidebarContext = createContext<SidebarContext>()
+        let useSidebar () =
+            let context = useContext(SidebarContext)
+            if not (unbox context) then failwith "useSidebar can only be used within a Sidebar"
+            else context
+            
+        let useIsMobile (fallback: bool) =
+            let (isMobile, setIsMobile) = createSignal(fallback)
+            createEffect(
+                    fun () ->
+                        let mobileBreakpointListener =
+                                makeMediaQueryListener
+                                    $"(max-width:{mobileBreakpoint - 1}px"
+                                    (fun event -> setIsMobile(event.matches))
+                        onCleanup(mobileBreakpointListener)
+                )
+            isMobile
 
 [<Erase>]
 type SidebarProvider() =
@@ -97,7 +107,7 @@ type SidebarProvider() =
             onCleanup( fun () -> window.removeEventListener("keydown", !!handleKeyDown))
         )
         
-        let state = fun () -> if open'() then Expanded else Collapsed
+        let state () = if open'() then Expanded else Collapsed
         let contextValue = {|
                 state = state
                 open' = open'
@@ -186,7 +196,8 @@ type Sidebar() =
                         
                         div(
                         class' = Lib.cn [|
-                            "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex"
+                            "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width)
+                            transition-[left,right,width] duration-200 ease-linear md:flex"
                             if props.side = sidebar.Left then
                                 "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
                             else "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]"
@@ -199,7 +210,10 @@ type Sidebar() =
                             ).spread props
                             {
                                 div(
-                                    class' = "flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+                                    class' = "flex h-full w-full flex-col bg-sidebar
+                                    group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border
+                                    group-data-[variant=floating]:border-sidebar-border
+                                    group-data-[variant=floating]:shadow"
                                 ).data("sidebar", !!sidebar.Sidebar)
                                     { props.children }
                             }
@@ -219,8 +233,8 @@ type SidebarTrigger() =
     [<SolidTypeComponent>]
     member props.constructor =
         let toggleSidebar = Context.useSidebar().toggleSidebar
-        Button( variant = button.variant.ghost,
-                size = button.size.icon,
+        Button( variant = Button.Variant.Ghost,
+                size = Button.Size.Icon,
                 class' = Lib.cn [| "size-7"; props.class' |],
                 onClick = (
                     fun event ->
@@ -245,12 +259,18 @@ type SidebarRail() =
             ariaLabel = "Toggle Sidebar",
             class' =
                 Lib.cn [|
-                    "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex"
-                    "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize"
-                    "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize"
-                    "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar"
-                    "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2"
-                    "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2"
+                    "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all
+                    ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px]
+                    hover:after:bg-sidebar-border group-data-[side=left]:-right-4
+                    group-data-[side=right]:left-0 sm:flex
+                    [[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize
+                    [[data-side=left][data-state=collapsed]_&]:cursor-e-resize
+                    [[data-side=right][data-state=collapsed]_&]:cursor-w-resize
+                    group-data-[collapsible=offcanvas]:translate-x-0
+                    group-data-[collapsible=offcanvas]:after:left-full
+                    group-data-[collapsible=offcanvas]:hover:bg-sidebar
+                    [[data-side=left][data-collapsible=offcanvas]_&]:-right-2
+                    [[data-side=right][data-collapsible=offcanvas]_&]:-left-2"
                     props.class'
                 |]
             )
@@ -265,8 +285,11 @@ type SidebarInset() =
         main(
             class' =
                 Lib.cn [|
-                    "relative flex min-h-svh flex-1 flex-col bg-background"
-                    "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow"
+                    "relative flex min-h-svh flex-1 flex-col bg-background
+                    peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))]
+                    md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2
+                    md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl
+                    md:peer-data-[variant=inset]:shadow"
                     props.class'
                 |]
             ).spread props
@@ -316,7 +339,8 @@ type SidebarContent() =
     [<SolidTypeComponent>]
     member props.constructor =
         div(class' = Lib.cn [|
-            "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden"
+            "flex min-h-0 flex-1 flex-col gap-2 overflow-auto
+            group-data-[collapsible=icon]:overflow-hidden"
             props.class'
         |]).spread props
 
@@ -337,8 +361,12 @@ type SidebarGroupLabel() =
     member props.constructor =
         div(
             class' = Lib.cn [|
-                "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0"
-                "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0"
+                "flex h-8 shrink-0 items-center rounded-md px-2 text-xs
+                font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring
+                transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2
+                [&>svg]:size-4 [&>svg]:shrink-0"
+                "group-data-[collapsible=icon]:-mt-8
+                group-data-[collapsible=icon]:opacity-0"
                 props.class'
             |]
             ).data("sidebar", "group-label")
@@ -351,7 +379,11 @@ type SidebarGroupAction() =
     member props.constructor =
         button(
             class' = Lib.cn [|
-                "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0"
+                "absolute right-3 top-3.5 flex aspect-square w-5 items-center
+                justify-center rounded-md p-0 text-sidebar-foreground outline-none
+                ring-sidebar-ring transition-transform hover:bg-sidebar-accent
+                hover:text-sidebar-accent-foreground focus-visible:ring-2
+                [&>svg]:size-4 [&>svg]:shrink-0"
                 // Increases the hit area of the button on mobile.
                 "after:absolute after:-inset-2 after:md:hidden"
                 "group-data-[collapsible=icon]:hidden"
@@ -375,7 +407,7 @@ type SidebarMenu() =
     [<SolidTypeComponent>]
     member props.constructor =
         ul(class' = Lib.cn [|
-            "flex w-full min-w-0 flex-col gap-1 list-image-none"
+            "flex w-full min-w-0 flex-col gap-1"
             props.class'
         |]).data("sidebar", "menu")
             .spread props
@@ -386,7 +418,7 @@ type SidebarMenuItem() =
     [<SolidTypeComponent>]
     member props.constructor =
         li(class' = Lib.cn [|
-            "group/menu-item relative list-image-none"
+            "group/menu-item relative"
             props.class'
         |]).data("sidebar","menu-item")
             .spread props
@@ -394,7 +426,18 @@ type SidebarMenuItem() =
 module sidebarMenuButton =
     let variants =
         Lib.cva
-            "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium aria-[current=page]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0"
+            "peer/menu-button flex w-full items-center gap-2 overflow-hidden
+            rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring
+            transition-[width,height,padding] hover:bg-sidebar-accent
+            hover:text-sidebar-accent-foreground focus-visible:ring-2
+            active:bg-sidebar-accent active:text-sidebar-accent-foreground
+            disabled:pointer-events-none disabled:opacity-50
+            group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none
+            aria-disabled:opacity-50 aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium
+            aria-[current=page]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent
+            data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8
+            group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate
+            [&>svg]:size-4 [&>svg]:shrink-0"
             {|
                 variants = {|
                     variant = {|
@@ -425,6 +468,60 @@ module sidebarMenuButton =
 open sidebarMenuButton
 
 [<Erase>]
+module kobalteButton =
+    let variants =
+        Lib.cva
+            "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+            {| variants =
+                {| variant =
+                    {| ``default`` = "bg-primary text-primary-foreground hover:bg-primary/90"
+                       destructive = "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                       outline = "border border-input hover:bg-accent hover:text-accent-foreground"
+                       secondary = "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                       ghost = "hover:bg-accent hover:text-accent-foreground"
+                       link = "text-primary underline-offset-4 hover:underline" |}
+                   size =
+                    {| ``default`` = "h-10 px-4 py-2"
+                       sm = "h-9 px-3 text-xs"
+                       lg = "h-11 px-8"
+                       icon = "size-10" |} |}
+               defaultVariants =
+                {| variant = "default"
+                   size = "default" |} |}
+    [<StringEnum>]
+    type variant =
+        | Default
+        | Destructive
+        | Outline
+        | Secondary
+        | Ghost
+        | Link
+    [<StringEnum>]
+    type size =
+        | Default
+        | [<CompiledName("sm")>] Small
+        | [<CompiledName("lg")>] Large
+        | [<CompiledName("icon")>] Icon
+
+[<Erase>]
+type KobalteButton() =
+    inherit Kobalte.Button()
+    [<Erase>]
+    member val variant: kobalteButton.variant = unbox null with get,set
+    [<Erase>]
+    member val size: kobalteButton.size = unbox null with get,set
+    
+    [<SolidTypeComponent>]
+    member props.sont =
+        Kobalte.Button(
+            class' = Lib.cn [|
+                kobalteButton.variants({| variant = props.variant ; size = props.size |})
+                props.class'
+            |]
+            ).spread props
+        
+
+[<Erase>]
 type SidebarMenuButton() =
     inherit KobalteButton()
     interface Polymorph
@@ -451,9 +548,9 @@ type SidebarMenuButton() =
                 .spread props
         
         Show(when' = !!props.tooltip, fallback = !!bakedButton) {
-            Tooltip(placement = Kobalte.Placement.right) {
+            Tooltip(placement = Kobalte.Enums.KobaltePlacement.Right) {
                 TooltipTrigger(class' = "w-full") { bakedButton }
-                TooltipContent(hidden = !!((state() <> State.Collapsed) || isMobile())) { props.tooltip }
+                TooltipContent(hidden = !!(state() <> State.Collapsed || isMobile())) { props.tooltip }
             }
         }
 
@@ -467,7 +564,12 @@ type SidebarMenuAction() =
         
         button(
             class' = Lib.cn [|
-                "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0"
+                "absolute right-1 top-1.5 flex aspect-square w-5 items-center
+                justify-center rounded-md p-0 text-sidebar-foreground
+                outline-none ring-sidebar-ring transition-transform
+                hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
+                focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground
+                [&>svg]:size-4 [&>svg]:shrink-0"
                 // Increases the hit area of the button on mobile.
                 "after:absolute after:-inset-2 after:md:hidden"
                 "peer-data-[size=sm]/menu-button:top-1"
@@ -534,7 +636,7 @@ type SidebarMenuSub() =
 type SidebarMenuSubItem() =
     inherit li()
     [<SolidTypeComponent>]
-    member props.constructor = li(class' = Lib.cn [| "list-image-none"; props.class' |]).spread props
+    member props.constructor = li().spread props
 
 [<Erase>]
 module sidebarMenuSubButton =
@@ -555,8 +657,15 @@ type SidebarMenuSubButton() =
         props.size <- Medium
         a(
             class' = Lib.cn [|
-                "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
-                "aria-[current=page]:bg-sidebar-accent aria-[current=page]:text-sidebar-accent-foreground"
+                "flex h-7 min-w-0 -translate-x-px items-center gap-2
+                overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none
+                ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
+                focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground
+                disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none
+                aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4
+                [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
+                "aria-[current=page]:bg-sidebar-accent
+                aria-[current=page]:text-sidebar-accent-foreground"
                 props.size = Small &&= "text-xs"
                 props.size = Medium &&= "text-sm"
                 "group-data-[collapsible=icon]:hidden"

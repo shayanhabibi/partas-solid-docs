@@ -1,3 +1,11 @@
+# UNDER CONSTRUCTION
+
+I'm preparing for release, the docs are under renovation.
+
+...
+
+---
+
 # Builder Interfaces
 
 When creating bindings, or perhaps when making a specialised component, you may find yourself
@@ -11,7 +19,7 @@ In these cases, you can make use of some of the predefined builder interfaces.
 type DatePickerApi = Glutinum.ZagJs.DatePickerApi
 [<Import("DatePicker.Context", datePickerPath)>]
 type DatePickerContext() =
-    inherit RegularNode()
+    interface RegularNode
     interface ChildLambdaProvider<Accessor<DatePickerApi>>
 ```
 
