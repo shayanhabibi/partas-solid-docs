@@ -99,7 +99,7 @@ type SheetContent() =
             Kobalte.Dialog.Content(class' = Lib.cn [|
                 sheet.variants({| position = props.position |})
                 props.class'
-                "max-h-screen overflow-y-auto"
+                "max-h-screen"
             |]).spread(props) {
                 props.children
                 Kobalte.Dialog.CloseButton(

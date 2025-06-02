@@ -11,7 +11,6 @@ open Browser.Types
 
 [<Erase>]
 module sidebar =
-    let mobileBreakpoint = 768
     let sidebarCookieName = "sidebar:state"
     let sidebarCookieMaxAge = 60 * 60 * 24 * 7
     let sidebarWidth = "16rem"
@@ -65,13 +64,13 @@ module Sidebar =
             if not (unbox context) then failwith "useSidebar can only be used within a Sidebar"
             else context
             
-        let useIsMobile (fallback: bool) =
+        let useIsMobile (fallback: bool) (size: int) =
             let (isMobile, setIsMobile) = createSignal(fallback)
             createEffect(
                     fun () ->
                         let mobileBreakpointListener =
                                 makeMediaQueryListener
-                                    $"(max-width:{mobileBreakpoint - 1}px"
+                                    $"(max-width:{size - 1}px"
                                     (fun event -> setIsMobile(event.matches))
                         onCleanup(mobileBreakpointListener)
                 )
@@ -83,9 +82,11 @@ type SidebarProvider() =
     [<Erase>] member val defaultOpen: bool = unbox null with get,set
     [<Erase>] member val open': bool = unbox null with get,set
     [<Erase>] member val onOpenChange: bool -> unit = unbox null with get,set
+    [<Erase>] member val mobileBreakpoint: int = unbox null with get,set
     [<SolidTypeComponent>]
     member props.constructor =
-        let isMobile = Context.useIsMobile(false)
+        props.mobileBreakpoint <- 768
+        let isMobile = Context.useIsMobile false props.mobileBreakpoint
         let (openMobile, setOpenMobile) = createSignal(false)
         let (_open, _setOpen) = createSignal(props.defaultOpen)
         let open': Accessor<bool> = fun () -> props.open' ??= _open()
@@ -161,7 +162,7 @@ type Sidebar() =
                 Sheet( open' = openMobile(), onOpenChange = !!setOpenMobile )
                     .spread props {
                         SheetContent(
-                            class' = "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+                            class' = "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden overflow-y-hide",
                             position = !!props.side
                             ).data("sidebar", !!sidebar.Sidebar)
                             .data("mobile", "true")

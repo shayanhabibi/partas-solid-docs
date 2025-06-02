@@ -138,7 +138,7 @@ type RootApp() =
     interface RegularNode
     [<SolidTypeComponent>]
     member props.__ =
-        SidebarProvider().style' [ "--navbar-size" ==> NavigationBar.size ] {
+        SidebarProvider(mobileBreakpoint = 1023).style' [ "--navbar-size" ==> NavigationBar.size ] {
             NavigationShell(
                 header = NavigationBar(),
                 sidebar = SidebarShell(footer = GithubVisit())
