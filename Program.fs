@@ -21,7 +21,7 @@ let [<Literal>] ext = ".mdx"
 [<RequireQualifiedAccess>]
 type Pages =
     | Introduction | Installation
-    | Compiling | Motivation
+    | Motivation
     | Overview | SolidTypeComponent
     | Spread | ContextProviders
     | Polymorphism | SpecialBuilders
@@ -53,8 +53,6 @@ type Pages =
     member this.route: string * TagValue =
         this.ToString().ToLowerInvariant(),
         match this with
-        | Compiling ->
-            import def (pg + "Compiling" + ext)
         | Introduction ->
             import def (pg + "Introduction" + ext)
         | Installation ->
@@ -170,7 +168,6 @@ let Root () =
         Route(path = "/", component' = !!LandingPage)
         PageRoute Pages.Introduction
         PageRoute Pages.Installation
-        PageRoute Pages.Compiling
         PageRoute Pages.Motivation
         PageRoute Pages.Overview
         PageRoute Pages.SolidTypeComponent
@@ -201,13 +198,13 @@ let Root () =
 Data.Navigation.store.Update [|
     NavigationGroup.create "Finished Pages" None [|
         Pages.Introduction.createNavigationItem()
+        Pages.Installation.createNavigationItem()
         Pages.Motion.createNavigationItem(version = "0.2.1")
         Pages.Kobalte.createNavigationItem(version = "0.2.0")        
     |]
     NavigationGroup.create "" None [|
         Pages.Introduction.createNavigationItem()
         Pages.Installation.createNavigationItem()
-        Pages.Compiling.createNavigationItem()
         Pages.Overview.createNavigationItem()
     |]
     NavigationGroup.create "Guides" None [|

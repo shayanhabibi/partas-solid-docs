@@ -65,16 +65,17 @@ module Sidebar =
             else context
             
         let useIsMobile (fallback: bool) (size: int) =
-            let (isMobile, setIsMobile) = createSignal(fallback)
-            createEffect(
-                    fun () ->
-                        let mobileBreakpointListener =
-                                makeMediaQueryListener
-                                    $"(max-width:{size - 1}px"
-                                    (fun event -> setIsMobile(event.matches))
-                        onCleanup(mobileBreakpointListener)
-                )
-            isMobile
+            // let (isMobile, setIsMobile) = createSignal(fallback)
+            // createEffect(
+            //         fun () ->
+            //             let mobileBreakpointListener =
+            //                     makeMediaQueryListener
+            //                         $"(max-width:{size - 1}px"
+            //                         (fun event -> setIsMobile(event.matches))
+            //             onCleanup(mobileBreakpointListener)
+            //     )
+            // isMobile
+            createMediaQuery($"(max-width:{size - 1}px")
 
 [<Erase>]
 type SidebarProvider() =

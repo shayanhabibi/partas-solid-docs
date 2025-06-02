@@ -46,3 +46,64 @@ You'll then also want to install the NPM dependencies for Solid-js.
 ### Femto
 
 When installing or using the bindings I've crafted, you can use femto to also manage the NPM dependencies. However, for some libraries this might not be possible (as they may have components packaged in versioned libraries themselves).
+
+---
+
+# Compiling/Usage
+
+Compile with the following flags passed to fable:
+
+```ansi caption="typedArrays optional, see below"
+[38;5;81m-e .fs.jsx -c Release [0m[--typedArrays false]
+```
+
+---
+
+## JSX
+
+This plugin compiles to JSX. You will need to therefore tell Fable to compile your JS files with the `.jsx` extension.
+
+```ansi
+[38;5;81m-e .fs.jsx
+```
+
+---
+
+## Release vs Debug AST
+
+F# & Fable give different AST trees between Release and Debug mode. The plugin was developed with Release mode in mind.
+This is a non-issue until you try to compile with `fable watch`.
+
+> When compiling with <c>fable watch</c> or in debug mode, use the release flag
+
+```ansi
+[38;5;81m-c Release
+```
+
+---
+
+## Typed arrays
+
+Fable uses the most optimised/performant primitives when compiling to `js` (ie not `ts`). This means integer arrays are
+compiled into the Int32Array primitives in `js`.
+
+This becomes an issue when you're passing arrays of integers to libraries like `ApexCharts`.
+
+There are two solutions to the problem, you can either disable typed arrays using a fable flag:
+
+```ansi
+[38;5;81m--typedArrays false
+```
+
+Or, you can `cast` the integers into a different type:
+
+```fsharp
+
+// VALID:
+let data = [|
+    box 4
+    box 18
+    box 43
+|]
+
+```

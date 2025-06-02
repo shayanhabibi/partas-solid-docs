@@ -18,7 +18,6 @@
     <ItemGroup>
         <Content Include="pages\Introduction.mdx" />
         <Content Include="pages\Installation.mdx" />
-        <Content Include="pages\Compiling.mdx" />
         <Content Include="pages\Motivation.mdx" />
         <Content Include="pages\Overview.mdx" />
         <Content Include="pages\SolidTypeComponent.mdx" />
