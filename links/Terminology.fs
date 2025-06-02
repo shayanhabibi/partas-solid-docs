@@ -39,7 +39,7 @@ let ExtensionMethod () =
 let Tag () =
     let description =
         p() {
-            "This refers to the JSX compiled tag of the shape `<div> ... </div>`"
+            "This refers to the JSX compiled tag of the shape"
         }
     TerminologyCard(word = "tag") { description }
 
@@ -59,7 +59,7 @@ let FunctionComponent () =
         br()
         "The function does not technically have to be marked with the SolidComponent attribute
         unless it is attempting to render "
-        TagComponent()
+        span(class' = "flex") { TagComponent() } 
         "s"
     }
 

@@ -21,7 +21,7 @@ let [<Literal>] ext = ".mdx"
 [<RequireQualifiedAccess>]
 type Pages =
     | Introduction | Installation
-    | Motivation
+    | Motivation | OxpeckerFork
     | Overview | SolidTypeComponent
     | Spread | ContextProviders
     | Polymorphism | SpecialBuilders
@@ -36,6 +36,7 @@ type Pages =
     [<SolidComponent>]
     member this.createNavigationItem (?icon, ?version: string) =
         match this with
+        | OxpeckerFork -> "Why Fork Oxpecker?"
         | ContextProviders -> "Context Providers"
         | Overview -> "Usage Overview"
         | SpecialBuilders -> "Custom Builders"
@@ -107,6 +108,8 @@ type Pages =
             import def "./pages/Primitives.mdx"
         | NeoDrag ->
             import def "./pages/NeoDrag.mdx"
+        | OxpeckerFork ->
+            import def "./pages/OxpeckerFork.mdx"
 
 [<SolidComponent>]
 let GithubVisit () =
@@ -193,6 +196,7 @@ let Root () =
         PageRoute Pages.TanStackTable
         PageRoute Pages.Primitives
         PageRoute Pages.NeoDrag
+        PageRoute Pages.OxpeckerFork
     }
 
 Data.Navigation.store.Update [|
@@ -201,9 +205,11 @@ Data.Navigation.store.Update [|
         Pages.Installation.createNavigationItem()
         Pages.Motion.createNavigationItem(version = "0.2.1")
         Pages.Kobalte.createNavigationItem(version = "0.2.0")        
+        Pages.ApexCharts.createNavigationItem(version = "0.2.0")
     |]
     NavigationGroup.create "" None [|
         Pages.Introduction.createNavigationItem()
+        Pages.OxpeckerFork.createNavigationItem()
         Pages.Installation.createNavigationItem()
         Pages.Overview.createNavigationItem()
     |]

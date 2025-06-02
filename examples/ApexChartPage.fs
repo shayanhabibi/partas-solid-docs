@@ -1,16 +1,10 @@
-import { ApexChartExample } from "../output/examples/ApexChartPage.fs.jsx";
+﻿module Partas.Solid.Docs.examples.ApexChartPage
 
-# Partas.Solid.ApexCharts
+open Partas.Solid
+open Fable.Core
+open Fable.Core.JsInterop
+open Partas.Solid.ApexCharts
 
-## Solid-ApexCharts Bindings
-
-See [the docs](https://github.com/wobsoriano/solid-apexcharts) for usage and options.
-
-The library is built with Pojos to create ApexChart options.
-
-## Example Usage
-
-```fsharp
 [<SolidComponent>]
 let ApexChartExample () =
     let options,_ = createSignal(Options(
@@ -42,7 +36,3 @@ let ApexChartExample () =
             series = series()
         )
     }
-
-```
-
-<ApexChartExample/>

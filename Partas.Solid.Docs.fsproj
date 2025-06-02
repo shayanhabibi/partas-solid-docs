@@ -43,6 +43,7 @@
         <Content Include="pages\TanStackTable.mdx" />
         <Content Include="pages\Primitives.mdx" />
         <Content Include="pages\NeoDrag.mdx" />
+        <Content Include="pages\OxpeckerFork.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ui\Utils.fs" />
@@ -120,6 +121,7 @@
         <Compile Include="examples\SpecialBuildersPage.fs" />
         <Compile Include="examples\MotionPage.fs" />
         <Compile Include="examples\KobaltePage.fs" />
+        <Compile Include="examples\ApexChartPage.fs" />
         <Compile Include="Types.fs" />
         <Compile Include="MdxStyler.fs" />
         <Compile Include="NavBar.fs" />
