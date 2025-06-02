@@ -1,13 +1,5 @@
 import { PartasSolidLink, OxpeckerSolidLink, FableLink } from "../output/links/Index.fs.jsx"
 
-# UNDER CONSTRUCTION
-
-I'm preparing for release, the docs are under renovation.
-
-...
-
----
-
 # Introduction
 
 <PartasSolidLink>Partas.Solid</PartasSolidLink> is a plugin for <FableLink>Fable</FableLink>, a F# to JS
@@ -25,21 +17,222 @@ with the F# language and compiler to prop up your development experience.
 
 ## What this means
 
-Many front-end frameworks define a DSL that allows you to build a tree of native elements such as **Feliz**
+Before I discuss any further, let me just show you an example of what the intentions of this framework are:
 
-```fsharp title="Feliz DSL"
+### Building Component Functions
+
+```fsharp title="Oxpecker.Solid & Partas.Solid" caption="Stock standard things (besides the DSL maybe being new to some people)"
+[<SolidComponent>]
+let MyComponent (myThesis: string) =
+    div(class' = "flex justify-center") {
+        "Hello World!"
+        button(onClick = fun _ -> console.log("Hello World!")) { "Click me!" }
+        myThesis
+    }
+
+[<SolidComponent>]
+let Usage () = 
+    div() {         
+        MyComponent "Something about my thesis"
+    }
+```
+
+
+```fsharp title="Feliz DSL" caption="Also stock standard, but in my opinion this is more verbose"
 [<ReactComponent>]
-let MyComponent () =
+let MyComponent (myThesis: string) =
     Html.div [
         prop.className "flex justify-center"
         prop.children [
+            Html.text "Hello World!"
             Html.button [
-                prop.className "bg-primary text-primary"
-                prop.text "Button"
+                prop.onClick (fun _ -> console.log("Hello World!"))
+                prop.text "Click me!"
+            Html.text myThesis
             ]
         ]
     ]
+
+[<ReactComponent>]
+let Usage () =
+    Html.div [
+        MyComponent "Something about my thesis"
+    ]
 ```
+
+---
+
+### Building DSL Components
+
+```fsharp title="Making a component in Partas.Solid"
+[<Erase>]
+type MyComponent() =
+    interface RegularNode // <-- specifies it can take children. inherits dom attributes like class'
+    [<Erase>]
+    member val myThesis: string = jsNative with get,set
+    [<SolidTypeComponent>]
+    member props.__ =
+        div(class' = "flex justify-center") {
+            "Hello World!"
+            button(onClick=fun _ -> console.log("Hello World!")
+            props.myThesis
+        }
+
+[<SolidComponent>]
+let Usage () =
+    div() {
+        MyComponent(myThesis = "Something about my thesis")
+    }
+```
+
+Looks the same right? But we can also do this:
+
+```fsharp title="Making a component in Partas.Solid"
+[<Erase>]
+type MyComponent() =
+    interface RegularNode // <-- specifies it can take children. inherits dom attributes like class'
+    [<SolidTypeComponent>]
+    member props.__ =
+        div(class' = "flex justify-center") {
+            "Hello World!"
+            button(onClick=fun _ -> console.log("Hello World!")
+            props.children // <-- children component property
+        }
+
+[<SolidComponent>]
+let Usage () =
+    div() {
+        MyComponent() { // <-- computation expression for children
+            "Something about my thesis"
+        }
+    }
+```
+
+It's been a hot minute since I've tried to write in Feliz, but I think it should go something like...
+
+```fsharp title="Attempting in Feliz" caption="I gave up."
+let private reactElement el props: ReactElement = import "createElement" "react"
+let private createElement el props: ReactElement = reactElement el (!!props |> createObj)
+let private createElementWithChildren el children: ReactElement = Feliz.Interop.reactElementWithChildren !!el children
+
+type MyComponent =
+    static member defaultProperties =
+        // ... I shudder to think how much further this would have to go
+
+
+type Html with
+    static member inline MyComponent (props: IMyComponentProp list) = createElement ReactElement props
+    static member inline MyComponent (children: ReactElement list) = createElementWithChildren ReactElement children
+    static member inline MyComponent () = createElement ReactElement unbox<IMyComponentProp list>([])
+```
+
+Of course you could just use functions the whole way for Feliz. But my component can easily have classes applied right off the bat without having to modify/create a new binding with a different name (or using static members and parameters which would result in usage that is wildly different from the rest of the DSL).
+
+The above is a trivial example, but you get the idea. You can compose flexible components into a library which are compiled and usable just like any JSX component library out there. You can then compose these into functions for that F# flavor we all love.
+
+The point is YOU have more flexibility in composition.
+
+### Compiled Output
+
+By the way, does this look familiar?
+
+```js title="Feliz/Fable compiled output" caption="(Recent efforts to make a Feliz version that uses the newer JSX helpers provided by Fable is underway which would make clean compiled code)"
+function AppSideBar() {
+    let el, el_2, el_4, el_6, children_1_4, children_1_2, children_1_1, children_1, children_1_3;
+    const items = ofArray([{
+        icon: (el = House, createElement(el, {})),
+        title: "Home",
+        url: "#",
+    }, {
+        icon: (el_2 = Inbox, createElement(el_2, {})),
+        title: "Inbox",
+        url: "#",
+    }, {
+        icon: (el_4 = Search, createElement(el_4, {})),
+        title: "Calendar",
+        url: "#",
+    }, {
+        icon: (el_6 = Settings, createElement(el_6, {})),
+        title: "Settings",
+        url: "#",
+    }]);
+    return createElement(Sidebar_1, {
+        collapsible: "icon",
+        children: (children_1_4 = ofArray([(children_1_2 = ofArray([createElement(SidebarGroupLabel_1, {
+            children: "Application",
+        }), (children_1_1 = singleton((children_1 = toList(delay(() => map((item) => {
+            let elems_1, elems;
+            return createElement(SidebarMenuItem_1, createObj(ofArray([["key", item.title], (elems_1 = [createElement(SidebarMenuButton_1, {
+                asChild: true,
+                tooltip: item.title,
+                children: createElement("a", createObj(ofArray([["href", item.url], (elems = [item.icon, createElement("span", {
+                    children: [item.title],
+                })], ["children", reactApi.Children.toArray(Array.from(elems))])]))),
+            })], ["children", reactApi_1.Children.toArray(Array.from(elems_1))])])));
+        }, items))), createElement(SidebarMenu_1, {
+            children: reactApi.Children.toArray(Array.from(children_1)),
+        }))), createElement(SidebarGroupContent_1, {
+            children: reactApi.Children.toArray(Array.from(children_1_1)),
+        }))]), createElement(SidebarGroup_1, {
+            children: reactApi.Children.toArray(Array.from(children_1_2)),
+        })), (children_1_3 = singleton(defaultOf()), createElement(SidebarRail, {
+            children: reactApi.Children.toArray(Array.from(children_1_3)),
+        }))]), createElement(SidebarContent_1, {
+            children: reactApi.Children.toArray(Array.from(children_1_4)),
+        })),
+    });
+}
+```
+
+Here's what Partas.Solid produces when compiling my Sidebar code:
+
+```jsx title="Partas.Solid Compiled output"
+export function NavSidebarContent(props) {
+    const [PARTAS_LOCAL, PARTAS_OTHERS] = splitProps(props, []);
+    const ctx = SidebarModule_Context_useSidebar();
+    return <For each={Data_Navigation_data}>
+        {(group, index) => <SidebarGroup>
+            <SidebarGroupLabel>
+                {group.Title}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+                <SidebarMenu>
+                    <For each={group.Items}>
+                        {(item, itemIndex) => <SidebarMenuItem>
+                            <SidebarMenuButton tooltip={item.Title}
+                                class="group/mbutton disabled:cursor-default"
+                                onClick={(_arg) => {
+                                    if (Data_Window_isMobile() && ctx.openMobile()) {
+                                        ctx.setOpenMobile(false);
+                                    }
+                                }}
+                                as={(PARTAS_POLYPROPS) => <A {...PARTAS_POLYPROPS} on:n$={false}
+                                    href={item.Path} />}>
+                                {(item.Icon != null) ? <item.Icon /> : <Separator orientation="vertical"
+                                    class="group-hover/mbutton:bg-black/20 in-aria-[current=page]:bg-black transition-colors group-hover/mbutton:in-aria-[current=page]:bg-black" />}
+                                <span>
+                                    {item.Title}
+                                </span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>}
+                    </For>
+                </SidebarMenu>
+            </SidebarGroupContent>
+        </SidebarGroup>}
+    </For>;
+}
+```
+
+I know which I would prefer to debug if I was suspicious the transpiled code was at fault for a bug, and not my business logic.
+
+<div class="text-sm">
+    _It's important to clarify here that the above example is not an admonishment of Feliz, its authors/contributors, nor users; it is simply
+    a demonstration of what Partas.Solid has to offer._
+</div>
+
+---
+
+Many front-end frameworks define a DSL that allows you to build a tree of native elements such as **Feliz**
 
 But it is not possible to then use components in the same DSL. Your components are built into functions or static members. Static members would be the closest you could get to the flexibility of having optional properties/attributes.
 

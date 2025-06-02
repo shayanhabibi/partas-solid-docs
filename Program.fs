@@ -2,6 +2,7 @@
 
 open Browser
 open Partas.Solid
+open Partas.Solid.Experimental
 open Partas.Solid.Lucide
 open Partas.Solid.Motion
 open Partas.Solid.Motion.LibDom
@@ -13,6 +14,9 @@ open Partas.Solid.Docs.NavigationShell
 open Partas.Solid.Docs.Types
 open Partas.Solid.UI
 
+let [<Literal>] def = "default"
+let [<Literal>] pg = "./pages/"
+let [<Literal>] ext = ".mdx"
 
 [<RequireQualifiedAccess>]
 type Pages =
@@ -29,7 +33,8 @@ type Pages =
     | Kobalte | Lucide | Cmdk
     | ApexCharts | TanStackTable
     | Primitives | NeoDrag
-    member this.createNavigationItem icon =
+    [<SolidComponent>]
+    member this.createNavigationItem (?icon, ?version: string) =
         match this with
         | ContextProviders -> "Context Providers"
         | Overview -> "Usage Overview"
@@ -39,66 +44,71 @@ type Pages =
         | _ -> this.ToString()
         |> NavigationItem.create
             <| this.ToString().ToLowerInvariant()
-            <| icon
+            <|
+                if version.IsSome then
+                    let comp () =
+                        Badge(variant = Badge.Variant.Secondary) {version.Value}
+                    Some !!comp
+                else icon
     member this.route: string * TagValue =
         this.ToString().ToLowerInvariant(),
         match this with
         | Compiling ->
-            import "default as Compiling" "./pages/Compiling.mdx"
+            import def (pg + "Compiling" + ext)
         | Introduction ->
-            import "default as Introduction" "./pages/Introduction.mdx"
+            import def (pg + "Introduction" + ext)
         | Installation ->
-            import "default as Installation" "./pages/Installation.mdx"
+            import def (pg + "Installation" + ext)
         | Motivation ->
-            import "default as Motivation" "./pages/Motivation.mdx"
+            import def "./pages/Motivation.mdx"
         | Overview ->
-            import "default as OverviewPage" "./pages/Overview.mdx"
+            import def "./pages/Overview.mdx"
         | SolidTypeComponent ->
-            import "default as SolidTypeComponentPage" "./pages/SolidTypeComponent.mdx"
+            import def "./pages/SolidTypeComponent.mdx"
         | Spread ->
-            import "default as SpreadPage" "./pages/Spread.mdx"
+            import def "./pages/Spread.mdx"
         | ContextProviders ->
-            import "default as ContextProvidersPage" "./pages/ContextProviders.mdx"
+            import def "./pages/ContextProviders.mdx"
         | Polymorphism ->
-            import "default as PolymorphismPage" "./pages/Polymorphism.mdx"
+            import def "./pages/Polymorphism.mdx"
         | SpecialBuilders ->
-            import "default as SpecialBuildersPage" "./pages/SpecialBuilders.mdx"
+            import def "./pages/SpecialBuilders.mdx"
         | Debugging ->
-            import "default as DebuggingPage" "./pages/Debugging.mdx"
+            import def "./pages/Debugging.mdx"
         | CommonIssues ->
-            import "default as CommonIssuesPage" "./pages/CommonIssues.mdx"
+            import def "./pages/CommonIssues.mdx"
         | Plugin ->
-            import "default as PluginPage" "./pages/Plugin.mdx"
+            import def "./pages/Plugin.mdx"
         | Setters ->
-            import "default as SettersPage" "./pages/Setters.mdx"
+            import def "./pages/Setters.mdx"
         | Bindings ->
-            import "default as BindingsPage" "./pages/Bindings.mdx"
+            import def "./pages/Bindings.mdx"
         | Experimental ->
-            import "default as ExperimentalPage" "./pages/Experimental.mdx"
+            import def "./pages/Experimental.mdx"
         | BuilderInterfaces ->
-            import "default as BuilderInterfacesPage" "./pages/BuilderInterfaces.mdx"
+            import def "./pages/BuilderInterfaces.mdx"
         | Components ->
-            import "default as ComponentPage" "./pages/Components.mdx"
+            import def "./pages/Components.mdx"
         | Terminology ->
-            import "default as TerminologyPage" "./pages/Terminology.mdx"
+            import def "./pages/Terminology.mdx"
         | ModularForms ->
-            import "default as ModularFormsPage" "./pages/ModularForms.mdx"
+            import def "./pages/ModularForms.mdx"
         | Motion ->
-            import "default as MotionPage" "./pages/Motion.mdx"
+            import def "./pages/Motion.mdx"
         | Kobalte ->
-            import "default as KobaltePage" "./pages/Kobalte.mdx"
+            import def "./pages/Kobalte.mdx"
         | Lucide ->
-            import "default as LucidePage" "./pages/Lucide.mdx"
+            import def "./pages/Lucide.mdx"
         | Cmdk ->
-            import "default as CmdkPage" "./pages/Cmdk.mdx"
+            import def "./pages/Cmdk.mdx"
         | ApexCharts ->
-            import "default as ApexChartsPage" "./pages/ApexCharts.mdx"
+            import def "./pages/ApexCharts.mdx"
         | TanStackTable ->
-            import "default as TanStackTablePage" "./pages/TanStackTable.mdx"
+            import def "./pages/TanStackTable.mdx"
         | Primitives ->
-            import "default as PrimitivesPage" "./pages/Primitives.mdx"
+            import def "./pages/Primitives.mdx"
         | NeoDrag ->
-            import "default as NeoDragPage" "./pages/NeoDrag.mdx"
+            import def "./pages/NeoDrag.mdx"
 
 [<SolidComponent>]
 let GithubVisit () =
@@ -110,7 +120,8 @@ let GithubVisit () =
                         MotionStyle.scale 1.1
                     ]
                 )  {
-                    Button(variant = Button.Variant.Ghost, size = Button.Size.Icon) {
+                    Button(variant = Button.Variant.Ghost, size = Button.Size.Icon)
+                        .as' (A(href = "https://github.com/shayanhabibi/Partas.Solid")) {
                         Lucide.Github()
                     }
                 }
@@ -127,7 +138,7 @@ type RootApp() =
     interface RegularNode
     [<SolidTypeComponent>]
     member props.__ =
-        SidebarProvider().style'({| ``--navbar-size`` = NavigationBar.size |}) {
+        SidebarProvider().style' [ "--navbar-size" ==> NavigationBar.size ] {
             NavigationShell(
                 header = NavigationBar(),
                 sidebar = SidebarShell(footer = GithubVisit())
@@ -144,8 +155,19 @@ let PageRoute (page: Pages) =
     Route(path = path, component' = pageComponent)
 
 [<SolidComponent>]
+let LandingPage () =
+    // nothing for landing page, route directly to introduction
+    let navigate = useNavigate()
+    mount {
+        navigate.InvokeOptions("introduction", replace = true)
+    }
+
+[<SolidComponent>]
 let Root () =
     HashRouter(root = !@RootApp) {
+        // This will only route to introduction if we land at the
+        // index page
+        Route(path = "/", component' = !!LandingPage)
         PageRoute Pages.Introduction
         PageRoute Pages.Installation
         PageRoute Pages.Compiling
@@ -177,40 +199,46 @@ let Root () =
     }
 
 Data.Navigation.store.Update [|
+    NavigationGroup.create "Finished Pages" None [|
+        Pages.Introduction.createNavigationItem()
+        Pages.Motion.createNavigationItem(version = "0.2.1")
+        Pages.Kobalte.createNavigationItem(version = "0.2.0")        
+    |]
     NavigationGroup.create "" None [|
-        Pages.Introduction.createNavigationItem None
-        Pages.Compiling.createNavigationItem None
-        Pages.Overview.createNavigationItem None
+        Pages.Introduction.createNavigationItem()
+        Pages.Installation.createNavigationItem()
+        Pages.Compiling.createNavigationItem()
+        Pages.Overview.createNavigationItem()
     |]
     NavigationGroup.create "Guides" None [|
-        Pages.SolidTypeComponent.createNavigationItem None
-        Pages.Spread.createNavigationItem None
-        Pages.ContextProviders.createNavigationItem None
-        Pages.Polymorphism.createNavigationItem None
-        Pages.SpecialBuilders.createNavigationItem None
-        Pages.BuilderInterfaces.createNavigationItem None
-        Pages.Setters.createNavigationItem None
-        Pages.Experimental.createNavigationItem None
-        Pages.Components.createNavigationItem None
+        Pages.SolidTypeComponent.createNavigationItem()
+        Pages.Spread.createNavigationItem()
+        Pages.ContextProviders.createNavigationItem()
+        Pages.Polymorphism.createNavigationItem()
+        Pages.SpecialBuilders.createNavigationItem()
+        Pages.BuilderInterfaces.createNavigationItem()
+        Pages.Setters.createNavigationItem()
+        Pages.Experimental.createNavigationItem()
+        Pages.Components.createNavigationItem()
     |]
     NavigationGroup.create "Issue Reporting" None [|
-        Pages.Debugging.createNavigationItem None
-        Pages.CommonIssues.createNavigationItem None
+        Pages.Debugging.createNavigationItem()
+        Pages.CommonIssues.createNavigationItem()
     |]
     NavigationGroup.create "Dev/Contributing" None [|
-        Pages.Plugin.createNavigationItem None
-        Pages.Bindings.createNavigationItem None
+        Pages.Plugin.createNavigationItem()
+        Pages.Bindings.createNavigationItem()
     |]
     NavigationGroup.create "Bindings" None [|
-        Pages.ApexCharts.createNavigationItem None
-        Pages.Cmdk.createNavigationItem None
-        Pages.Kobalte.createNavigationItem None
-        Pages.Lucide.createNavigationItem None
-        Pages.ModularForms.createNavigationItem None
-        Pages.Primitives.createNavigationItem None
-        Pages.NeoDrag.createNavigationItem None
-        Pages.TanStackTable.createNavigationItem None
-        Pages.Motion.createNavigationItem None
+        Pages.Primitives.createNavigationItem()
+        Pages.Motion.createNavigationItem(version = "0.2.1")
+        Pages.Kobalte.createNavigationItem(version = "0.2.0")
+        Pages.ApexCharts.createNavigationItem(version = "0.2.0")
+        Pages.Cmdk.createNavigationItem(version = "0.2.0")
+        Pages.Lucide.createNavigationItem(version = "0.2.0")
+        Pages.ModularForms.createNavigationItem(version = "0.2.0")
+        Pages.NeoDrag.createNavigationItem(version = "0.2.0")
+        Pages.TanStackTable.createNavigationItem(version = "0.2.0")
     |]
 |]
 

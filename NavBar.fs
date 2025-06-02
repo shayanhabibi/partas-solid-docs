@@ -71,6 +71,12 @@ type NavBar() =
                                     "Bindings for libraries in, or compatible with, Partas.Solid"
                                 }
                             }
+                            NavigationMenuLink(href = "https://github.com/shayanhabibi/Partas.Solid.Primitives") {
+                                NavigationMenuLabel() { "Partas.Solid.Primitives" }
+                                NavigationMenuDescription() {
+                                    "Bindings for solid-primitives for Partas.Solid"
+                                }
+                            }
                         }
                     }
                 }

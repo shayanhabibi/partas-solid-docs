@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="LICENSE.txt" />
         <Content Include="package.json" />
         <Content Include="index.css" />
         <Content Include="vite.config.mts" />
@@ -118,6 +119,8 @@
         <Compile Include="examples\OverviewPage.fs" />
         <Compile Include="examples\SpreadPage.fs" />
         <Compile Include="examples\SpecialBuildersPage.fs" />
+        <Compile Include="examples\MotionPage.fs" />
+        <Compile Include="examples\KobaltePage.fs" />
         <Compile Include="Types.fs" />
         <Compile Include="MdxStyler.fs" />
         <Compile Include="NavBar.fs" />
@@ -141,7 +144,7 @@
       <PackageReference Include="Partas.Solid.Kobalte" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Lucide" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.ModularForms" Version="0.2.0" />
-      <PackageReference Include="Partas.Solid.Motion" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Motion" Version="0.2.1" />
       <PackageReference Include="Partas.Solid.NeoDrag" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Primitives.Media" Version="0.1.1" />
       <PackageReference Include="Partas.Solid.Sonner" Version="0.2.0" />
