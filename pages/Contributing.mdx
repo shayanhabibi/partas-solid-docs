@@ -1,0 +1,59 @@
+# Contributing
+
+All contributions, from usage, issues, discussions, documentation, features, etc are appreciated!
+
+## Docs
+
+I'm too close to this project now to understand what needs to be explained further. I would appreciate a helping hand in crafting documentation pages or letting me know where you need help.
+
+## Standard Library
+
+All submissions are appreciated. If a submission is made, it will very likely be relevant to, and useful for `Oxpecker.Solid` also.
+
+Contributors will be provided opportunity to contribute to `Oxpecker.Solid` themselves, otherwise it will be done by myself and credited to them.
+
+## Plugin
+
+The plugin is extensively documented to explain usage.
+
+```ansi title="File Structure"
+Partas.Solid.FablePlugin
+|-- Types.fs
+|-- Utils.fs
+|-- Spec.fs
+|__ Plugin.fs
+```
+
+### Types
+
+Contains DUs, types, and functions relating to those types.
+
+### Utils
+
+Contains utilities that are frequently used to simplify pattern recognition such as:
+
+```fsharp
+let (|StartsWith|_|) (value: string) = function
+    | (s: string) when s.StartsWith(value) -> Some()
+    | _ -> None
+```
+
+These utilities should be based on primitives rather than structures defined in `Types.fs`.
+
+The only reason it is compiled after `Types.fs` is to allow us to utilise `PluginContext` (which is defined in `Types.fs`) if required.
+
+### Spec
+
+Contains methods to render or modify specific AST nodes under the `Baked` module.
+
+Contains helper patterns or utilities to recognize and filter different AST Nodes under their respective module names. 
+
+These are things such as the PartasName active pattern in the Ident module, which will only match against declared types that start with `Partas.Solid`, and then sanitize the type name and provide it as the matched value. 
+
+### Plugin
+
+The meat of the package.
+
+Contains all the transformation logic and attributes.
+
+Great effort is taken to document every pattern usage, what it aims to do, and why.

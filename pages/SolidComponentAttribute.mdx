@@ -2,7 +2,7 @@
 
 ## Overview
 
-Apply this to bindings you are compiling into tag bindings:
+Apply this to bindings you are compiling into tag/element bindings:
 
 ```fsharp
 [<SolidComponent>]
@@ -35,3 +35,78 @@ Ie. Ensure your component has a unit parameter/argument if you want to use it as
 
 This attribute recursively transforms the body of a member/function.
 It recursively searches the AST for tags, collects these tags into Elements, and compiles them as a Fable.Core call to JSX.create.
+
+<div class="px-8 text-muted-foreground text-sm">
+    There are a few other optimisations and tricks that the plugin does with the AST, such as removing CE calls in lists etc to prevent obscuring Solid-JSs reactivity system. This was before Fable included these optimisations internally.
+</div>
+
+## When else to use it
+
+A common case is when you are referring to a Tag element value when constructing a record or tuple to pass or store for the UI to access (such as an icon).
+
+Without being in a scope accessible by the plugin (a binding or member with a SolidComponent or SolidTypeComponent attribute) the `!@` operator would not work.
+
+However, if your icon/tag/element was a function binding (as opposed to a TypeComponent binding) then this wouldn't be an issue, and you can refer to the icon/tag/element directly.
+
+```fsharp
+[<Erase>]
+type LucideActivity() =
+    inherit Lucide.Activity()
+    [<SolidTypeComponent>]
+    member props.__ =
+        Lucide.Activity()
+
+[<SolidComponent>]
+let MyIcon () =
+    Lucide.Activity()
+
+// ...
+// Notice this is not in a Plugin scope
+for item in titles do
+    match item with
+    | "Sports" -> // v---- This won't work
+        item, Some !@LucideActivity
+        // This would work
+        item, Some MyIcon
+
+[<SolidComponent>] // <-- Plugin Scope
+let makeItems =
+    for item in titles do
+        match item with
+        | "Sports" -> // v--- Works
+            item, Some !@LucideActivity
+```
+
+## Signatures
+
+```fsharp
+type SolidComponentAttribute(flag: int)
+new()
+new(compileOptions: ComponentFlag)
+```
+
+```fsharp
+type ComponentFlag =
+    /// Default transformations.
+    | Default = 0b0000
+    /// Prints the AST tree before transformation. Please supply a minimal
+    /// example with this flag set when submitting issues.
+    | DebugMode = 0b0001
+    /// SolidComponents optimise Pojo constructors so that
+    /// setter members which are not in the primary constructor that
+    /// are used when building the pojo, are compiled into the object
+    /// initialiser in JS instead of being deferred
+    | SkipPojoOptimisation = 0b0010
+    /// Noisy. Prints any expressions that are disposed of in transformation.
+    | PrintDisposals = 0b0100
+    /// SolidComponents optimise out computation expressions, particularly of
+    /// lists etc. In Fable 5, this should be handled by the compiler.
+    | SkipCEOptimisation = 0b1000
+```
+
+```fsharp
+[<SolidComponent(
+    ComponentFlag.DebugMode 
+    ||| ComponentFlag.SkipPojoOptimisation)>]
+let Binding () = // ...
+```
