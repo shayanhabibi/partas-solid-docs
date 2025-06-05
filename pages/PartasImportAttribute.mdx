@@ -1,0 +1,15 @@
+# PartasImportAttribute
+
+<div class="px-8 text-muted-foreground text-sm">
+    This is mostly for internal use only. The explanation for when it is used is provided.
+    Should not be used or required in general use except in unique circumstances.
+</div>
+
+> If you need to bind a component which provides a state object to its children via a lambda, then you should use of the [`ChildLambdaProvider` interfaces](/interfaces) instead of writing computation expression methods.
+
+When the `ImportAttribute` is used, the parameter/argument names of methods become generic in the subsequent AST.
+
+The names of the parameters are specific in the case of the Builders that are used in constructing the computation expressions. This is done to simplify the transformation process.
+When they are defined with the type declaration with a `ImportAttribute` (such as the `For` or `Index` elements), then the parameter names become obfuscated.
+
+To prevent this, `PartasImportAttribute` is used. It performs the same job as `ImportAttribute`, but does so *after the fact*. This means the AST we parse is not obfuscated.

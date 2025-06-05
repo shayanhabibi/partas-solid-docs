@@ -18,22 +18,11 @@
     <ItemGroup>
         <Content Include="pages\Introduction.mdx" />
         <Content Include="pages\Installation.mdx" />
-        <Content Include="pages\Motivation.mdx" />
         <Content Include="pages\Overview.mdx" />
-        <Content Include="pages\SolidTypeComponent.mdx" />
         <Content Include="pages\Spread.mdx" />
-        <Content Include="pages\ContextProviders.mdx" />
         <Content Include="pages\Polymorphism.mdx" />
-        <Content Include="pages\SpecialBuilders.mdx" />
-        <Content Include="pages\Debugging.mdx" />
-        <Content Include="pages\CommonIssues.mdx" />
-        <Content Include="pages\Plugin.mdx" />
-        <Content Include="pages\Setters.mdx" />
         <Content Include="pages\Bindings.mdx" />
         <Content Include="pages\Experimental.mdx" />
-        <Content Include="pages\BuilderInterfaces.mdx" />
-        <Content Include="pages\Components.mdx" />
-        <Content Include="pages\Terminology.mdx" />
         <Content Include="pages\ModularForms.mdx" />
         <Content Include="pages\Motion.mdx" />
         <Content Include="pages\Kobalte.mdx" />
@@ -44,6 +33,17 @@
         <Content Include="pages\Primitives.mdx" />
         <Content Include="pages\NeoDrag.mdx" />
         <Content Include="pages\OxpeckerFork.mdx" />
+        <Content Include="pages\Storybook.mdx" />
+        <Content Include="pages\CompiledOutput.mdx" />
+        <Content Include="pages\SolidComponentAttribute.mdx" />
+        <Content Include="pages\SolidTypeComponentAttribute.mdx" />
+        <Content Include="pages\PartasImportAttribute.mdx" />
+        <Content Include="pages\ComponentFlags.mdx" />
+        <Content Include="pages\ApiDifferences.mdx" />
+        <Content Include="pages\Troubleshooting.mdx" />
+        <Content Include="pages\Contributing.mdx" />
+        <Content Include="pages\Interfaces.mdx" />
+        <Content Include="pages\StyleHelpers.mdx" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ui\Utils.fs" />
@@ -137,13 +137,13 @@
       <PackageReference Include="Fable.AST" Version="5.0.0-beta.1" />
       <PackageReference Include="Fable.Browser.ResizeObserver" Version="1.0.0" />
       <PackageReference Include="Fable.Core" Version="4.5.0" />
-      <PackageReference Include="Partas.Solid" Version="1.0.0-alpha98" />
+      <PackageReference Include="Partas.Solid" Version="1.0.0" />
       <PackageReference Include="Partas.Solid.ApexCharts" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.ArkUI" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Cmdk" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Corvu" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Kobalte" Version="0.2.0" />
-      <PackageReference Include="Partas.Solid.Lucide" Version="0.2.0" />
+      <PackageReference Include="Partas.Solid.Lucide" Version="0.513.0" />
       <PackageReference Include="Partas.Solid.ModularForms" Version="0.2.0" />
       <PackageReference Include="Partas.Solid.Motion" Version="0.2.1" />
       <PackageReference Include="Partas.Solid.NeoDrag" Version="0.2.0" />

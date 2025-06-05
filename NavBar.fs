@@ -1,12 +1,12 @@
 ﻿module Partas.Solid.Docs.NavBar
 
+open Partas.Solid.Lucide
 open Partas.Solid.Docs.Types
 open Partas.Solid
 open Partas.Solid.Polymorphism
 open Partas.Solid.Router
 open Partas.Solid.UI
 open Partas.Solid.UI.Context
-open Partas.Solid.Lucide
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Core.JS
@@ -23,12 +23,16 @@ type NavBar() =
             "flex gap-8 pr-8 items-center justify-between"
             props.class'
         |]).spread(props) {
-            div(class' = if Data.Window.isMobile() then "flex flex-row pl-2 gap-2" else "pl-8" ) {
+            div(class' = "flex flex-row gap-2 " + if Data.Window.isMobile() then "pl-2" else "pl-8" ) {
                 if Data.Window.isMobile() then
                     SidebarTrigger(onClick = fun _ -> if ctx.openMobile() then ctx.setOpenMobile false else ctx.setOpenMobile true)
                 span(class' = "flex text-2xl font-bold") {
                     AnimatedShinyText() { "Partas" }
                     ".Solid"
+                }
+                Badge(class' = "h-6 self-center text-[10px]", variant = Badge.Variant.Success) {
+                    Lucide.PartyPopper(class' = "pr-2 self-center")
+                    "v 1.0.0!"
                 }
             }
             div() {
@@ -41,7 +45,7 @@ type NavBar() =
                             hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground
                             focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50
                             data-[expanded]:bg-accent/50 bg-sidebar",
-                        href = "https://github.com/shayanhabibi/Partas.Solid"
+                        href = "https://github.com/shayanhabibi/partas-solid-docs"
                     ) { "Source" }
                     NavigationMenuItem() {
                         NavigationMenuTrigger(class' = "bg-sidebar") {
