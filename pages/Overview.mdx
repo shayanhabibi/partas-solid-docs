@@ -1,19 +1,17 @@
 import { AnimatedShinyText } from "../output/ui/texteffects/AnimatedShinyText.fs.jsx";
 import { ButtonExample } from "../output/examples/OverviewPage.fs.jsx";
 
-# UNDER CONSTRUCTION
+<div class="text-muted-foreground px-8 pb-2 justify-items-center text-sm">
 
-I'm preparing for release, the docs are under renovation.
+    _The API and usage of Solid-JS is not discussed in this documentation. Please visit [the Solid-js website](https://www.solidjs.com/) for reference on Solid-JS._
 
-...
-
----
+</div>
 
 # Overview
 
 Solid-js operates under the modus operandi of *everything is a function*.
 
-<AnimatedShinyText>Partas</AnimatedShinyText>.Solid provides two methods to create functions which are compiled into HtmlElements.
+Partas.Solid provides two methods to create functions which are compiled into HtmlElements.
 
 ### SolidComponent
 
@@ -55,7 +53,7 @@ let ButtonExample () =
 
 The second is applied to custom tags.
 
-In Partas.Solid, you can define a custom tag which inherits from RegularNode (if the element accepts children), or VoidNode (if the element does not accept children).
+In Partas.Solid, you can define a custom tag which interfaces with RegularNode (if the element accepts children), or VoidNode (if the element does not accept children).
 
 To be valid, the tags must be defined within a namespace that begins with `Partas.Solid`.
 
@@ -77,7 +75,9 @@ These can then be used like the predefined tags:
 MyComponent(myAttribute = true, class' = "MyClass") { "text" }
 ```
 
-This allows you to interop with other JS libraries using Fables ImportAttribute. `SolidTypeComponent` allows you to compile a function that shares the type name, allowing you to define the attributes of a component and its implementation in the same type definition.
+This allows you to interop with other JS libraries using Fables ImportAttribute.
+
+`SolidTypeComponent` allows you to compile a function that shares the type name, allowing you to define the attributes of a component and its implementation in the same type definition. This allows you to define a component usable in the Oxpecker DSL.
 
 ```fsharp
 namespace Partas.Solid.MyComponent
@@ -89,10 +89,12 @@ type MyComponent() =
     interface RegularNode
     [<Erase>] member val myAttribute: bool = JS.undefined with get,set
     [<SolidTypeComponent>]
-    member props.constructor =
+    member props.__ =
         let buttonText =
             if props.myAttribute then
                 "MyComponent"
             else "Button"
         button() { buttonText }
 ```
+
+There are plenty of things Partas.Solid does under the hood to help you out, such as providing an easy abstraction over merging props, and automated prop splitting.

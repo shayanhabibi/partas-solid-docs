@@ -1,0 +1,37 @@
+# SolidComponentAttribute
+
+## Overview
+
+Apply this to bindings you are compiling into tag bindings:
+
+```fsharp
+[<SolidComponent>]
+let Button (label: string) =
+    button(class' = "btn") { label }
+```
+
+## Requirements
+
+The Attribute is only required when transformation of the body/content is required for elements in the DSL.
+
+```fsharp title="Can compose bindings without the SolidComponentAttribute"
+[<SolidComponent>]
+let WrapDiv (btn: button) =
+    div() { btn }
+
+let Render () =
+    "Button"
+    |> Button
+    |> WrapDiv
+```
+
+## Gotchas
+
+Solid-js works under the modus operandi 'everything is a function'. This means you can use your bindings as components **if they are functions**.
+
+Ie. Ensure your component has a unit parameter/argument if you want to use it as a component.
+
+## How does it work
+
+This attribute recursively transforms the body of a member/function.
+It recursively searches the AST for tags, collects these tags into Elements, and compiles them as a Fable.Core call to JSX.create.
