@@ -244,7 +244,7 @@ Data.Navigation.store.Update [|
     NavigationGroup.create "Bindings" None [|
         Pages.Primitives.createNavigationItem()
         Pages.Motion.createNavigationItem(version = "0.2.1")
-        Pages.Kobalte.createNavigationItem(version = "0.2.0")
+        Pages.Kobalte.createNavigationItem(version = "0.3.0")
         Pages.ApexCharts.createNavigationItem(version = "0.2.0")
         Pages.Cmdk.createNavigationItem(version = "0.2.0")
         Pages.Lucide.createNavigationItem(version = "0.514.0")

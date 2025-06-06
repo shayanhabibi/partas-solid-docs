@@ -32,21 +32,24 @@ type NavBar() =
                 }
                 Badge(class' = "h-6 self-center text-[10px]", variant = Badge.Variant.Success) {
                     Lucide.PartyPopper(class' = "pr-2 self-center")
-                    "v 1.0.0!"
+                    if Data.Window.isMobile() then
+                        "1.0.0"
+                    else
+                        "v 1.0.0!"
                 }
             }
             div() {
                 NavigationMenu() {
-
-                    A(
-                        class' =
-                            "group/trigger inline-flex h-10 w-full items-center justify-center whitespace-nowrap
-                            rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent
-                            hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground
-                            focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50
-                            data-[expanded]:bg-accent/50 bg-sidebar",
-                        href = "https://github.com/shayanhabibi/partas-solid-docs"
-                    ) { "Source" }
+                    if not <| Data.Window.isMobile() then
+                        A(
+                            class' =
+                                "group/trigger inline-flex h-10 w-full items-center justify-center whitespace-nowrap
+                                rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent
+                                hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground
+                                focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50
+                                data-[expanded]:bg-accent/50 bg-sidebar",
+                            href = "https://github.com/shayanhabibi/partas-solid-docs"
+                        ) { "Source" }
                     NavigationMenuItem() {
                         NavigationMenuTrigger(class' = "bg-sidebar") {
                             "Ecosystem" ; NavigationMenuIcon()
